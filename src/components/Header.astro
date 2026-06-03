@@ -43,18 +43,34 @@ import { docsParentCategories } from '../data/docs';
       </a>
     </div>
 
-    <button
-      id="mobile-menu-toggle"
-      type="button"
-      class="inline-flex h-10 w-10 items-center justify-center rounded-none border border-[var(--color-border)] bg-[var(--color-surface-muted)] text-slate-700 transition hover:bg-[var(--color-hover-surface)] lg:hidden"
-      aria-expanded="false"
-      aria-controls="mobile-menu-panel"
-      aria-label="Toggle menu"
-    >
-      <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
-      </svg>
-    </button>
+    <div class="flex items-center gap-2 lg:hidden">
+      <button
+        type="button"
+        class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-none bg-transparent text-slate-700 transition hover:bg-transparent"
+        aria-label="Toggle dark mode"
+        title="Toggle dark mode"
+      >
+        <svg class="theme-toggle-moon h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646a9 9 0 1 0 11.708 11.708Z" />
+        </svg>
+        <svg class="theme-toggle-sun hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75v2.5M12 17.75v2.5M18.25 12h2.5M3.25 12h2.5M17.127 6.873l1.768-1.768M5.105 18.895l1.768-1.768M17.127 17.127l1.768 1.768M5.105 5.105l1.768 1.768M15.25 12A3.25 3.25 0 1 1 8.75 12a3.25 3.25 0 0 1 6.5 0Z" />
+        </svg>
+      </button>
+
+      <button
+        id="mobile-menu-toggle"
+        type="button"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-none border border-[var(--color-border)] bg-[var(--color-surface-muted)] text-slate-700 transition hover:bg-[var(--color-hover-surface)]"
+        aria-expanded="false"
+        aria-controls="mobile-menu-panel"
+        aria-label="Toggle menu"
+      >
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
   </div>
 
   <div id="mobile-menu-panel" class="hidden border-t border-[var(--color-border)] bg-[var(--color-surface)] lg:hidden">
@@ -70,21 +86,7 @@ import { docsParentCategories } from '../data/docs';
         ))}
       </nav>
 
-      <div class="mt-4 flex items-center gap-3">
-        <button
-          type="button"
-          class="theme-toggle inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-none bg-transparent text-slate-700 transition hover:bg-transparent"
-          aria-label="Toggle dark mode"
-          title="Toggle dark mode"
-        >
-          <svg class="theme-toggle-moon h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 0 1 8.646 3.646a9 9 0 1 0 11.708 11.708Z" />
-          </svg>
-          <svg class="theme-toggle-sun hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3.75v2.5M12 17.75v2.5M18.25 12h2.5M3.25 12h2.5M17.127 6.873l1.768-1.768M5.105 18.895l1.768-1.768M17.127 17.127l1.768 1.768M5.105 5.105l1.768 1.768M15.25 12A3.25 3.25 0 1 1 8.75 12a3.25 3.25 0 0 1 6.5 0Z" />
-          </svg>
-        </button>
-
+      <div class="mt-4">
         <a
           href={site.navCtaHref}
           class="inline-flex w-full items-center justify-center rounded-none bg-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
