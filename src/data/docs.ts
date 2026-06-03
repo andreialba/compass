@@ -13,7 +13,7 @@ export const docsParentCategories = [
 
 export const docsCategories = [
   {
-    name: 'Setting Up Compass',
+    name: 'Start Here',
     slug: 'setting-up-compass',
     parent: 'getting-started',
     description: 'Install the project, understand the file structure, and shape your first publishing workflow.',

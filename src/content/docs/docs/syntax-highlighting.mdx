@@ -6,9 +6,9 @@ order: 4
 updatedAt: 2026-06-03
 ---
 
-Astro ships with built-in syntax highlighting, so Compass can render fenced code blocks in Markdown and MDX without any extra setup. In this theme, code samples use Shiki with the `github-light` theme for a clean documentation-friendly look.
+Syntax highlighting is part of the writing experience in Compass, so it fits better as a docs feature than as a reusable component.
 
-## Add a code block
+## Use in MDX
 
 To highlight a snippet, write a fenced code block and add the language name after the opening backticks:
 
@@ -20,7 +20,16 @@ export function formatTitle(title: string) {
 ```
 ````
 
-That will render as:
+## Where it is configured
+
+Compass uses Astro's built-in Markdown highlighting through `shikiConfig` in `astro.config.mjs`.
+
+If you want to change the theme or code presentation later, update:
+
+- `astro.config.mjs` for Shiki theme configuration
+- `src/index.css` for code block styling
+
+## Preview
 
 ```ts
 export function formatTitle(title: string) {
@@ -43,7 +52,7 @@ Compass will highlight many common languages out of the box, including:
 - `astro`
 - `md`
 
-## Example snippets
+## More examples
 
 ### Astro component
 
@@ -74,26 +83,12 @@ npm install
 npm run dev
 ```
 
-## Theme configuration
-
-Compass uses Astro's built-in Markdown highlighting through `shikiConfig` in `astro.config.mjs`:
-
-```js
-markdown: {
-  shikiConfig: {
-    theme: 'github-light',
-  },
-},
-```
-
-If you want to use a different built-in Shiki theme later, update that value and rebuild the site.
-
-## When to use inline code
+## Inline code
 
 For short references inside a paragraph, wrap code in single backticks like `astro.config.mjs` or `npm run build`.
 
 ## Learn more
 
-For the full Astro feature set, including Prism, dual light/dark themes, and the `<Code />` component, see the official Astro guide:
+Official Astro guide:
 
 https://docs.astro.build/en/guides/syntax-highlighting/
