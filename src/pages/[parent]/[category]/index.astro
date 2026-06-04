@@ -9,6 +9,7 @@ import {
   getCategoriesForParent,
   getCategoryHref,
   getCleanDocSlug,
+  getSearchPreviewLookup,
   getSuggestedSearchArticles,
 } from '../../../data/docs';
 import Layout from '../../../layouts/Layout.astro';
@@ -34,7 +35,11 @@ const sections = parent ? getCategoriesForParent(parent.slug).map((section) => (
 const categoryDocs = allDocs
   .filter((doc) => doc.data.category === category)
   .sort((a, b) => a.data.order - b.data.order);
-const suggestedArticles = getSuggestedSearchArticles(allDocs);
+const suggestedArticles = getSuggestedSearchArticles(allDocs, {
+  limit: 3,
+  categories: category ? [category] : undefined,
+});
+const searchPreviews = getSearchPreviewLookup(allDocs);
 ---
 
 <Layout title={`${subcategory?.name ?? category} | ${parent?.name ?? 'Compass'}`}>
@@ -44,6 +49,7 @@ const suggestedArticles = getSuggestedSearchArticles(allDocs);
         sections={sections}
         activeCategory={subcategory?.slug}
         suggestions={suggestedArticles}
+        searchPreviews={searchPreviews}
       />
     )}
 

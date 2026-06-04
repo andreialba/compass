@@ -8,12 +8,14 @@ interface Props {
     category: string;
     url: string;
   }[];
+  searchPreviews?: Record<string, string>;
 }
 
 const {
   title = 'How can we help?',
   placeholder = 'Search the docs...',
   suggestions = [],
+  searchPreviews = {},
 } = Astro.props;
 ---
 
@@ -27,6 +29,7 @@ const {
       data-search-empty="No matching articles yet."
       data-search-error="Search is available after running npm run build and npm run preview."
       data-search-suggestions={JSON.stringify(suggestions)}
+      data-search-previews={JSON.stringify(searchPreviews)}
     >
       <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-[var(--color-search-placeholder)]">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">

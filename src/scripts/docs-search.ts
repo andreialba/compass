@@ -4,6 +4,7 @@ type PagefindSearchResultData = {
   meta: {
     title?: string;
     category?: string;
+    preview?: string;
   };
 };
 
@@ -49,6 +50,15 @@ const escapeHtml = (value: string) =>
     .replaceAll("'", '&#39;');
 
 const stripTags = (value: string) => value.replace(/<[^>]*>/g, '').trim();
+
+const normalizeSearchUrl = (value: string) => {
+  try {
+    const url = new URL(value, window.location.origin);
+    return url.pathname.replace(/\/$/, '') || '/';
+  } catch {
+    return value.replace(/\/$/, '') || '/';
+  }
+};
 
 const getPagefind = () => {
   if (!pagefindPromise) {
@@ -138,7 +148,7 @@ const renderResults = (results: HTMLDivElement, entries: SearchEntry[]) => {
       (entry) => `
         <a href="${escapeHtml(entry.url)}" class="block px-4 py-3 transition-colors hover:bg-[var(--color-hover-surface)]">
           <div class="search-result-title text-sm font-medium text-[var(--color-accent)]">${escapeHtml(entry.title)}</div>
-          <div class="mt-1 text-xs text-[var(--color-text-muted)]">${escapeHtml(entry.category)}${entry.excerpt ? ` - ${entry.excerpt}` : ''}</div>
+          ${entry.excerpt ? `<div class="mt-1 text-xs leading-5 text-[var(--color-text-muted)]">${escapeHtml(entry.excerpt)}</div>` : ''}
         </a>
       `,
     )
@@ -155,6 +165,18 @@ const getSuggestions = (root: HTMLElement): SearchEntry[] => {
     return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
+  }
+};
+
+const getSearchPreviews = (root: HTMLElement) => {
+  const rawPreviews = root.dataset.searchPreviews;
+  if (!rawPreviews) return {} as Record<string, string>;
+
+  try {
+    const parsed = JSON.parse(rawPreviews) as Record<string, string>;
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch {
+    return {};
   }
 };
 
@@ -175,7 +197,10 @@ const setSearchUnavailable = (input: HTMLInputElement, results: HTMLDivElement, 
   renderEmptyState(results, message);
 };
 
-const searchPagefind = async (query: string): Promise<SearchEntry[] | null | undefined> => {
+const searchPagefind = async (
+  query: string,
+  searchPreviews: Record<string, string>,
+): Promise<SearchEntry[] | null | undefined> => {
   const pagefind = await getPagefind();
   if (!pagefind) return null;
 
@@ -185,10 +210,12 @@ const searchPagefind = async (query: string): Promise<SearchEntry[] | null | und
   return Promise.all(
     search.results.slice(0, MAX_RESULTS).map(async (result) => {
       const data = await result.data();
+      const normalizedUrl = normalizeSearchUrl(data.url);
+      const preview = searchPreviews[normalizedUrl] ?? data.meta.preview ?? stripTags(data.excerpt ?? '');
 
       return {
         title: data.meta.title ?? 'Untitled',
-        excerpt: stripTags(data.excerpt ?? ''),
+        excerpt: preview,
         category: data.meta.category ?? 'Docs',
         url: data.url,
       };
@@ -203,6 +230,7 @@ const attachSearch = (root: HTMLElement) => {
   const { input, results } = elements;
   const emptyMessage = root.dataset.searchEmpty ?? 'No matching articles found.';
   const errorMessage = root.dataset.searchError ?? 'Search is temporarily unavailable.';
+  const searchPreviews = getSearchPreviews(root);
   let latestQuery = '';
 
   input.addEventListener(
@@ -230,7 +258,7 @@ const attachSearch = (root: HTMLElement) => {
       return;
     }
 
-    const matches = await searchPagefind(query);
+    const matches = await searchPagefind(query, searchPreviews);
     if (query !== latestQuery) return;
 
     if (matches === undefined) {

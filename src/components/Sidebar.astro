@@ -14,9 +14,10 @@ interface Props {
     category: string;
     url: string;
   }[];
+  searchPreviews?: Record<string, string>;
 }
 
-const { sections, activeCategory, suggestions = [] } = Astro.props;
+const { sections, activeCategory, suggestions = [], searchPreviews = {} } = Astro.props;
 ---
 
 <aside class="docs-sidebar w-full shrink-0 md:sticky md:top-24 md:w-72">
@@ -26,6 +27,7 @@ const { sections, activeCategory, suggestions = [] } = Astro.props;
     data-search-empty="No matching articles found."
     data-search-error="Search is available after running npm run build and npm run preview."
     data-search-suggestions={JSON.stringify(suggestions)}
+    data-search-previews={JSON.stringify(searchPreviews)}
   >
     <input
       type="search"

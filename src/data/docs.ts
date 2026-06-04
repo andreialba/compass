@@ -80,6 +80,7 @@ export function getCleanDocSlug(docId: string) {
 
 type SearchSuggestionSource = {
   id: string;
+  body?: string;
   data: {
     title: string;
     description?: string;
@@ -95,17 +96,76 @@ export type SearchSuggestion = {
   url: string;
 };
 
+const SEARCH_PREVIEW_MAX_CHARS = 160;
+
+const clampText = (value: string, maxChars = SEARCH_PREVIEW_MAX_CHARS) => {
+  if (value.length <= maxChars) return value;
+
+  const truncated = value.slice(0, maxChars);
+  const lastSpaceIndex = truncated.lastIndexOf(' ');
+
+  return `${(lastSpaceIndex > 60 ? truncated.slice(0, lastSpaceIndex) : truncated).trimEnd()}...`;
+};
+
+const stripMarkdown = (value: string) =>
+  value
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[*_~>#-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+export function getDocSearchPreview(doc: SearchSuggestionSource, maxChars = SEARCH_PREVIEW_MAX_CHARS) {
+  const body = doc.body ?? '';
+  const paragraphBlocks = body
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean);
+
+  const firstContentParagraph = paragraphBlocks.find((block) => {
+    const firstLine = block.split('\n')[0]?.trim() ?? '';
+
+    return !(
+      firstLine.startsWith('#') ||
+      firstLine.startsWith('import ') ||
+      firstLine.startsWith('export ') ||
+      firstLine.startsWith('<')
+    );
+  });
+
+  const previewSource = firstContentParagraph ?? doc.data.description ?? '';
+  return clampText(stripMarkdown(previewSource), maxChars);
+}
+
+export function getSearchPreviewLookup(docs: SearchSuggestionSource[]) {
+  return Object.fromEntries(
+    docs.map((doc) => [getArticleHref(doc.data.category, getCleanDocSlug(doc.id)), getDocSearchPreview(doc)]),
+  ) as Record<string, string>;
+}
+
 export function getSuggestedSearchArticles(
   docs: SearchSuggestionSource[],
-  { limit = 4, category = 'start-here' }: { limit?: number; category?: string } = {},
+  {
+    limit = 4,
+    categories = ['start-here'],
+  }: { limit?: number; categories?: string[] } = {},
 ): SearchSuggestion[] {
+  const allowedCategories = new Set(categories);
+
   return docs
-    .filter((doc) => doc.data.category === category)
-    .sort((a, b) => (a.data.order ?? 100) - (b.data.order ?? 100))
+    .filter((doc) => allowedCategories.has(doc.data.category))
+    .sort((a, b) => {
+      const categoryIndexDifference = categories.indexOf(a.data.category) - categories.indexOf(b.data.category);
+      if (categoryIndexDifference !== 0) return categoryIndexDifference;
+      return (a.data.order ?? 100) - (b.data.order ?? 100);
+    })
     .slice(0, limit)
     .map((doc) => ({
       title: doc.data.title,
-      excerpt: doc.data.description ?? '',
+      excerpt: getDocSearchPreview(doc),
       category: docsCategoryDataMap[doc.data.category as keyof typeof docsCategoryDataMap]?.name ?? doc.data.category,
       url: getArticleHref(doc.data.category, getCleanDocSlug(doc.id)),
     }));

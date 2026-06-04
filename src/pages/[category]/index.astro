@@ -19,6 +19,7 @@ import {
   getCategoryHref,
   getCleanDocSlug,
   getParentForCategory,
+  getSearchPreviewLookup,
   getSuggestedSearchArticles,
 } from '../../data/docs';
 import Layout from '../../layouts/Layout.astro';
@@ -55,7 +56,16 @@ const sections = parent ? buildSidebarSections(parent.slug) : [];
 const categoryDocs = allDocs
   .filter((doc) => doc.data.category === category)
   .sort((a, b) => a.data.order - b.data.order);
-const suggestedArticles = getSuggestedSearchArticles(allDocs);
+const suggestedArticles = isParentView && parent
+  ? getSuggestedSearchArticles(allDocs, {
+      limit: 3,
+      categories: sections.map((section) => section.slug),
+    })
+  : getSuggestedSearchArticles(allDocs, {
+      limit: 3,
+      categories: category ? [category] : undefined,
+    });
+const searchPreviews = getSearchPreviewLookup(allDocs);
 ---
 
 <Layout title={`${isParentView ? parentData?.name : subcategory?.name ?? category} | Compass`}>
@@ -65,6 +75,7 @@ const suggestedArticles = getSuggestedSearchArticles(allDocs);
           sections={sections}
           activeCategory={subcategory?.slug}
           suggestions={suggestedArticles}
+          searchPreviews={searchPreviews}
         />
       )}
 

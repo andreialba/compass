@@ -8,6 +8,7 @@ import {
   getCategoriesForParent,
   getCategoryHref,
   getCleanDocSlug,
+  getSearchPreviewLookup,
   getSuggestedSearchArticles,
 } from '../../../data/docs';
 import Layout from '../../../layouts/Layout.astro';
@@ -36,7 +37,11 @@ const sidebarSections = getCategoriesForParent(parent.slug).map((section) => ({
   slug: section.slug,
   href: getCategoryHref(section.slug),
 }));
-const suggestedArticles = getSuggestedSearchArticles(allDocs);
+const suggestedArticles = getSuggestedSearchArticles(allDocs, {
+  limit: 3,
+  categories: [doc.data.category],
+});
+const searchPreviews = getSearchPreviewLookup(allDocs);
 ---
 
 <Layout title={`${doc.data.title} | ${categoryData?.name ?? doc.data.category}`} description={doc.data.description}>
@@ -45,6 +50,7 @@ const suggestedArticles = getSuggestedSearchArticles(allDocs);
       sections={sidebarSections}
       activeCategory={doc.data.category}
       suggestions={suggestedArticles}
+      searchPreviews={searchPreviews}
     />
 
     <div class="min-w-0 max-w-3xl flex-1">
