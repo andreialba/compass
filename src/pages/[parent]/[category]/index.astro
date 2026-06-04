@@ -53,21 +53,21 @@ const categoryDocs = allDocs
 
     <div class="min-w-0 flex-1">
       <section class="site-panel rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-10">
-        <nav class="docs-breadcrumbs mb-6 flex flex-wrap items-center gap-2 text-sm text-slate-500">
-          <a href="/" class="breadcrumb-link transition hover:text-slate-950">Home</a>
+        <nav class="docs-breadcrumbs mb-6 flex flex-wrap items-center gap-2 text-sm text-[var(--color-text-muted)]">
+          <a href="/" class="breadcrumb-link transition hover:text-[var(--color-accent)]">Home</a>
           <span>/</span>
-          {parent && <a href={`/${parent.slug}`} class="breadcrumb-link transition hover:text-slate-950">{parent.name}</a>}
+          {parent && <a href={`/${parent.slug}`} class="breadcrumb-link transition hover:text-[var(--color-accent)]">{parent.name}</a>}
           <span>/</span>
-          <span class="breadcrumb-current text-slate-700">{subcategory?.name ?? category}</span>
+          <span class="breadcrumb-current text-[var(--color-text-strong)]">{subcategory?.name ?? category}</span>
         </nav>
 
-        <h1 class="text-4xl font-semibold tracking-tight text-slate-950">{subcategory?.name ?? category}</h1>
-        <p class="mt-3 max-w-2xl text-base leading-7 text-slate-600">
+        <h1 class="text-4xl font-semibold tracking-tight text-[var(--color-text-strong)]">{subcategory?.name ?? category}</h1>
+        <p class="mt-3 max-w-2xl text-base leading-7 text-[var(--color-text)]">
           {subcategory?.description ?? 'Browse the articles in this section and jump into the topic you need.'}
         </p>
 
         {categoryDocs.length === 0 ? (
-          <div class="category-empty mt-10 rounded-none bg-[var(--color-surface-muted)] px-6 py-14 text-center text-slate-500">
+          <div class="category-empty mt-10 rounded-none bg-[var(--color-surface-muted)] px-6 py-14 text-center text-[var(--color-text-muted)]">
             No articles yet. Add MDX files in <code>src/content/docs/{category}</code> to populate this section.
           </div>
         ) : (

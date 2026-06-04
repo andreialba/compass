@@ -22,7 +22,7 @@ const {
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
     <meta name="color-scheme" content="light dark" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon-light.svg" id="site-favicon" />
     <link rel="canonical" href={new URL(Astro.url.pathname, site.siteUrl).toString()} />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
@@ -36,20 +36,30 @@ const {
       const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       const shouldUseDark = storedTheme ? storedTheme === 'dark' : systemPrefersDark;
       document.documentElement.classList.toggle('dark', shouldUseDark);
+
+      window.__syncCompassFavicon = (isDark) => {
+        const favicon = document.getElementById('site-favicon');
+
+        if (favicon instanceof HTMLLinkElement) {
+          favicon.href = isDark ? '/favicon-dark.svg' : '/favicon-light.svg';
+        }
+      };
+
+      window.__syncCompassFavicon(shouldUseDark);
     </script>
   </head>
-  <body class="relative flex min-h-screen flex-col bg-[var(--color-canvas)] font-sans text-slate-800 antialiased">
+  <body class="relative flex min-h-screen flex-col bg-[var(--color-canvas)] font-sans text-[var(--color-text)] antialiased">
     <div class="flex min-h-screen flex-col">
       <Header />
       <main class="flex-1">
         <slot />
       </main>
-      <footer class="site-footer mt-20 border-t border-[var(--color-border)] px-4 py-10 text-center text-sm text-slate-500 md:px-8">
+      <footer class="site-footer mt-20 border-t border-[var(--color-border)] px-4 py-10 text-center text-sm text-[var(--color-text-muted)] md:px-8">
         <a
           href={site.githubUrl}
           target="_blank"
           rel="noreferrer"
-          class="mx-auto mb-4 inline-flex text-slate-500 transition-colors hover:text-[var(--color-accent)]"
+          class="mx-auto mb-4 inline-flex text-[var(--color-text-muted)] transition-colors hover:text-[var(--color-accent)]"
           aria-label={`${site.name} on GitHub`}
           title={`${site.name} on GitHub`}
         >

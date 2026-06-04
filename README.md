@@ -8,6 +8,8 @@
 
 Compass is a clean Astro documentation theme for product docs, support centers, and internal knowledge bases. It combines MDX content collections, category-driven navigation, built-in search, reusable content components, and a polished light/dark UI without pulling in a heavyweight docs framework.
 
+**Preview:** [https://compass-lilac-tau.vercel.app/](https://compass-lilac-tau.vercel.app/)
+
 ## Highlights
 
 - Built with Astro 6 and Tailwind CSS 4

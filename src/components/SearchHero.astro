@@ -27,7 +27,7 @@ const searchIndex = allDocs.map((doc) => {
 
 <section class="search-hero bg-[var(--color-surface)] py-14 md:py-16">
   <div class="mx-auto w-full max-w-[1280px] px-4 text-center md:px-8">
-    <h1 class="search-hero-title mb-6 text-4xl font-extrabold tracking-tight text-slate-900 md:text-5xl">{title}</h1>
+    <h1 class="search-hero-title mb-6 text-4xl font-extrabold tracking-tight text-[var(--color-text-strong)] md:text-5xl">{title}</h1>
 
     <div class="relative mx-auto w-full max-w-[600px]">
       <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-[var(--color-search-placeholder)]">
@@ -42,7 +42,7 @@ const searchIndex = allDocs.map((doc) => {
         placeholder={placeholder}
         autocomplete="off"
       />
-      <button class="search-submit absolute bottom-2 right-2 top-2 cursor-pointer rounded-none bg-[var(--color-accent)] px-6 text-sm font-semibold text-white transition-colors hover:bg-blue-700">
+      <button class="search-submit absolute bottom-2 right-2 top-2 cursor-pointer rounded-none bg-[var(--color-brand)] px-6 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)]">
         Search
       </button>
       <div
@@ -78,7 +78,7 @@ const searchIndex = allDocs.map((doc) => {
       resultsContainer.classList.remove('hidden');
 
       if (results.length === 0) {
-        resultsContainer.innerHTML = '<p class="px-4 py-5 text-sm text-slate-500">No matching articles yet.</p>';
+        resultsContainer.innerHTML = '<p class="px-4 py-5 text-sm text-[var(--color-text-muted)]">No matching articles yet.</p>';
         return;
       }
 
@@ -87,7 +87,7 @@ const searchIndex = allDocs.map((doc) => {
           (result) => `
             <a href="${result.url}" class="block px-4 py-3 transition-colors hover:bg-[var(--color-hover-surface)]">
               <div class="search-result-title text-sm font-medium text-[var(--color-accent)]">${result.title}</div>
-              <div class="mt-1 text-xs text-slate-500">${result.category.replace(/-/g, ' ')}${result.description ? ' - ' + result.description : ''}</div>
+              <div class="mt-1 text-xs text-[var(--color-text-muted)]">${result.category.replace(/-/g, ' ')}${result.description ? ' - ' + result.description : ''}</div>
             </a>
           `,
         )

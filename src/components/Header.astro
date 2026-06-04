@@ -5,11 +5,11 @@ import { docsParentCategories } from '../data/docs';
 
 <header class="site-header sticky top-0 z-40 w-full shrink-0 border-b border-[var(--color-border)] bg-[color:color-mix(in_srgb,var(--color-surface)_95%,transparent)] backdrop-blur">
   <div class="mx-auto flex h-16 max-w-[1280px] items-center justify-between px-4 md:px-8">
-    <a href="/" class="text-2xl font-bold tracking-tight text-slate-900 transition-opacity hover:opacity-80">
+    <a href="/" class="text-2xl font-bold tracking-tight text-[var(--color-text-strong)] transition-opacity hover:opacity-80">
       Compass
     </a>
 
-    <nav class="hidden items-center gap-6 text-sm font-medium text-slate-600 lg:flex">
+    <nav class="hidden items-center gap-6 text-sm font-medium text-[var(--color-text)] lg:flex">
       {docsParentCategories.map((category) => (
         <a
           href={`/${category.slug}`}
@@ -23,7 +23,7 @@ import { docsParentCategories } from '../data/docs';
     <div class="hidden items-center gap-3 lg:flex">
       <button
         type="button"
-        class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-none bg-transparent text-slate-700 transition hover:bg-transparent"
+        class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-none bg-transparent text-[var(--color-control-text)] transition hover:bg-transparent"
         aria-label="Toggle dark mode"
         title="Toggle dark mode"
       >
@@ -39,7 +39,7 @@ import { docsParentCategories } from '../data/docs';
         href={site.navCtaHref}
         target="_blank"
         rel="noreferrer"
-        class="hidden rounded-none bg-[var(--color-accent)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-blue-700 lg:inline-flex"
+        class="hidden rounded-none bg-[var(--color-brand)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)] lg:inline-flex"
       >
         {site.navCtaLabel}
       </a>
@@ -48,7 +48,7 @@ import { docsParentCategories } from '../data/docs';
     <div class="flex items-center gap-2 lg:hidden">
       <button
         type="button"
-        class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-none bg-transparent text-slate-700 transition hover:bg-transparent"
+        class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-none bg-transparent text-[var(--color-control-text)] transition hover:bg-transparent"
         aria-label="Toggle dark mode"
         title="Toggle dark mode"
       >
@@ -63,7 +63,7 @@ import { docsParentCategories } from '../data/docs';
       <button
         id="mobile-menu-toggle"
         type="button"
-        class="inline-flex h-10 w-10 items-center justify-center rounded-none border border-[var(--color-border)] bg-[var(--color-surface-muted)] text-slate-700 transition hover:bg-[var(--color-hover-surface)]"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-none border border-[var(--color-border)] bg-[var(--color-surface-muted)] text-[var(--color-control-text)] transition hover:bg-[var(--color-hover-surface)]"
         aria-expanded="false"
         aria-controls="mobile-menu-panel"
         aria-label="Toggle menu"
@@ -81,7 +81,7 @@ import { docsParentCategories } from '../data/docs';
         {docsParentCategories.map((category) => (
           <a
           href={`/${category.slug}`}
-          class="block w-full rounded-none px-4 py-3 text-sm font-medium text-slate-700 transition-colors hover:bg-[var(--color-hover-surface)] hover:text-[var(--color-accent)]"
+          class="block w-full rounded-none px-4 py-3 text-sm font-medium text-[var(--color-text)] transition-colors hover:bg-[var(--color-hover-surface)] hover:text-[var(--color-accent)]"
           >
             {category.name}
           </a>
@@ -93,7 +93,7 @@ import { docsParentCategories } from '../data/docs';
           href={site.navCtaHref}
           target="_blank"
           rel="noreferrer"
-          class="inline-flex w-full items-center justify-center rounded-none bg-[var(--color-accent)] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-blue-700"
+          class="inline-flex w-full items-center justify-center rounded-none bg-[var(--color-brand)] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)]"
         >
           {site.navCtaLabel}
         </a>
@@ -129,6 +129,8 @@ import { docsParentCategories } from '../data/docs';
       button.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
       button.setAttribute('title', isDark ? 'Switch to light mode' : 'Switch to dark mode');
     });
+
+    window.__syncCompassFavicon?.(isDark);
   };
 
   syncThemeButtons();

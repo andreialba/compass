@@ -52,28 +52,28 @@ const searchIndex = allDocs.map((entry) => ({
     />
 
     <div class="min-w-0 max-w-3xl flex-1">
-      <nav class="docs-breadcrumbs mb-6 flex flex-wrap items-center gap-2 text-sm text-slate-500">
-        <a href="/" class="breadcrumb-link transition hover:text-slate-950">Home</a>
+      <nav class="docs-breadcrumbs mb-6 flex flex-wrap items-center gap-2 text-sm text-[var(--color-text-muted)]">
+        <a href="/" class="breadcrumb-link transition hover:text-[var(--color-accent)]">Home</a>
         <span>/</span>
-        <a href={`/${parent.slug}`} class="breadcrumb-link transition hover:text-slate-950">{parent.name}</a>
+        <a href={`/${parent.slug}`} class="breadcrumb-link transition hover:text-[var(--color-accent)]">{parent.name}</a>
         <span>/</span>
-        <a href={getCategoryHref(doc.data.category)} class="breadcrumb-link transition hover:text-slate-950">{categoryData?.name ?? doc.data.category}</a>
+        <a href={getCategoryHref(doc.data.category)} class="breadcrumb-link transition hover:text-[var(--color-accent)]">{categoryData?.name ?? doc.data.category}</a>
         <span>/</span>
-        <span class="breadcrumb-current text-slate-700">{doc.data.title}</span>
+        <span class="breadcrumb-current text-[var(--color-text-strong)]">{doc.data.title}</span>
       </nav>
 
       <article class="site-panel docs-article rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-10">
-        <h1 class="text-4xl font-semibold tracking-tight text-slate-950 md:text-5xl">{doc.data.title}</h1>
+        <h1 class="text-4xl font-semibold tracking-tight text-[var(--color-text-strong)] md:text-5xl">{doc.data.title}</h1>
         {doc.data.description && (
-          <p class="mt-5 max-w-2xl text-base leading-7 text-slate-600">{doc.data.description}</p>
+          <p class="mt-5 max-w-2xl text-base leading-7 text-[var(--color-text)]">{doc.data.description}</p>
         )}
 
-        <div class="prose prose-slate mt-10 max-w-none prose-headings:font-semibold prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:text-blue-700 prose-code:rounded prose-code:bg-slate-100 prose-code:px-1 prose-code:py-0.5 prose-code:text-slate-800 prose-pre:bg-transparent prose-pre:p-0">
+        <div class="prose mt-10 max-w-none prose-headings:font-semibold prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:text-[var(--color-accent-hover)] prose-code:rounded prose-code:bg-[var(--color-inline-code-bg)] prose-code:px-1 prose-code:py-0.5 prose-code:text-[var(--color-inline-code-fg)] prose-pre:bg-transparent prose-pre:p-0">
           <Content components={mdxComponents} />
         </div>
 
         {doc.data.updatedAt && (
-          <p class="mt-10 pt-6 text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+          <p class="mt-10 pt-6 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-text-soft)]">
             Updated {doc.data.updatedAt.toLocaleDateString('en-US', {
               month: 'long',
               day: 'numeric',

@@ -10,7 +10,9 @@ Syntax highlighting is part of the writing experience in Compass, so it fits bet
 
 ## Use in MDX
 
-To highlight a snippet, write a fenced code block and add the language name after the opening backticks:
+To highlight a snippet, write a fenced code block and add the language name after the opening backticks.
+
+This first example is the raw Markdown you type into the article:
 
 ````md
 ```ts
@@ -19,6 +21,14 @@ export function formatTitle(title: string) {
 }
 ```
 ````
+
+And this is how that same snippet renders on the page:
+
+```ts
+export function formatTitle(title: string) {
+  return title.trim().replace(/\s+/g, ' ');
+}
+```
 
 ## Where it is configured
 
@@ -29,7 +39,7 @@ If you want to change the theme or code presentation later, update:
 - `astro.config.mjs` for Shiki theme configuration
 - `src/index.css` for code block styling
 
-## Preview
+## More Preview
 
 ```ts
 export function formatTitle(title: string) {

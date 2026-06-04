@@ -41,7 +41,7 @@ const { sections, activeCategory, searchIndex } = Astro.props;
   </div>
 
   <div class="mt-8">
-    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-slate-400">Categories</p>
+    <p class="text-xs font-semibold uppercase tracking-[0.28em] text-[var(--color-text-soft)]">Categories</p>
     <ul class="mt-5 space-y-1">
       {sections.map((section) => {
         const isActiveSection = activeCategory === section.slug;
@@ -53,7 +53,7 @@ const { sections, activeCategory, searchIndex } = Astro.props;
               class={`sidebar-link block rounded-none px-3 py-2.5 text-sm font-medium transition ${
                 isActiveSection
                   ? 'is-active text-[var(--color-accent)]'
-                  : 'text-slate-700 hover:bg-[var(--color-hover-surface)] hover:text-slate-950'
+                  : 'text-[var(--color-text)] hover:bg-[var(--color-hover-surface)] hover:text-[var(--color-text-strong)]'
               }`}
             >
               {section.name}
@@ -90,7 +90,7 @@ const { sections, activeCategory, searchIndex } = Astro.props;
       sidebarResults.classList.remove('hidden');
 
       if (results.length === 0) {
-        sidebarResults.innerHTML = '<p class="px-4 py-4 text-sm text-slate-500">No matching articles found.</p>';
+        sidebarResults.innerHTML = '<p class="px-4 py-4 text-sm text-[var(--color-text-muted)]">No matching articles found.</p>';
         return;
       }
 
@@ -99,7 +99,7 @@ const { sections, activeCategory, searchIndex } = Astro.props;
           (result) => `
             <a href="${result.url}" class="block px-4 py-3 transition-colors hover:bg-[var(--color-hover-surface)]">
               <div class="text-sm font-medium text-[var(--color-accent)]">${result.title}</div>
-              <div class="mt-1 text-xs text-slate-500">${result.category}${result.description ? ' - ' + result.description : ''}</div>
+              <div class="mt-1 text-xs text-[var(--color-text-muted)]">${result.category}${result.description ? ' - ' + result.description : ''}</div>
             </a>
           `,
         )
