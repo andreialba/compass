@@ -5,7 +5,6 @@ import { mdxComponents } from '../../../components/docs/mdx-components';
 import {
   docsCategoryDataMap,
   docsParentMap,
-  getArticleHref,
   getCategoriesForParent,
   getCategoryHref,
   getCleanDocSlug,
@@ -29,17 +28,11 @@ const { doc } = Astro.props;
 const { Content } = await render(doc);
 const categoryData = docsCategoryDataMap[doc.data.category as keyof typeof docsCategoryDataMap];
 const parent = docsParentMap[categoryData.parent as keyof typeof docsParentMap];
-const allDocs = await getCollection('docs');
+const pagefindCategory = categoryData?.name ?? doc.data.category;
 const sidebarSections = getCategoriesForParent(parent.slug).map((section) => ({
   name: section.name,
   slug: section.slug,
   href: getCategoryHref(section.slug),
-}));
-const searchIndex = allDocs.map((entry) => ({
-  title: entry.data.title,
-  description: entry.data.description ?? '',
-  category: docsCategoryDataMap[entry.data.category as keyof typeof docsCategoryDataMap]?.name ?? entry.data.category,
-  url: getArticleHref(entry.data.category, getCleanDocSlug(entry.id)),
 }));
 ---
 
@@ -48,7 +41,6 @@ const searchIndex = allDocs.map((entry) => ({
     <Sidebar
       sections={sidebarSections}
       activeCategory={doc.data.category}
-      searchIndex={searchIndex}
     />
 
     <div class="min-w-0 max-w-3xl flex-1">
@@ -62,7 +54,11 @@ const searchIndex = allDocs.map((entry) => ({
         <span class="breadcrumb-current text-[var(--color-text-strong)]">{doc.data.title}</span>
       </nav>
 
-      <article class="site-panel docs-article rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-10">
+      <article
+        class="site-panel docs-article rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-10"
+        data-pagefind-body
+        data-pagefind-meta={`category:${pagefindCategory}`}
+      >
         <h1 class="text-4xl font-semibold tracking-tight text-[var(--color-text-strong)] md:text-5xl">{doc.data.title}</h1>
         {doc.data.description && (
           <p class="mt-5 max-w-2xl text-base leading-7 text-[var(--color-text)]">{doc.data.description}</p>

@@ -1,9 +1,9 @@
 ---
-title: "How Search and Navigation Work"
-description: "Understand how Compass builds category pages, article links, and client-side search from your docs data."
+title: "How Navigation Works"
+description: "Understand how Compass builds category pages, article links, and sidebar structure from your docs data."
 category: "docs"
 order: 5
-updatedAt: 2026-06-03
+updatedAt: 2026-06-04
 ---
 
 Compass keeps navigation explicit. Instead of inferring everything from folders, it combines your docs data file with article frontmatter and route templates.
@@ -13,7 +13,8 @@ Compass keeps navigation explicit. Instead of inferring everything from folders,
 - `src/data/docs.ts` defines parent sections, sub-categories, labels, descriptions, and slugs
 - `src/content/docs` stores the articles and their frontmatter
 - `src/pages/[parent]/[category]/index.astro` renders sub-category pages
-- `src/pages/[parent]/[category]/[slug].astro` renders article pages
+- `src/pages/[parent]/[category]/[slug].astro` renders canonical article pages
+- `src/components/Sidebar.astro` renders the per-section sidebar
 
 ## How article links are generated
 
@@ -30,21 +31,25 @@ category: "docs"
 
 Saved as `manage-docs.mdx`, this becomes `/getting-started/docs/manage-docs`.
 
-## How search works
+## How the sidebar is assembled
 
-Compass builds a small client-side search index from the docs collection.
+Compass groups categories under parent sections. When a reader opens an article or category page, the sidebar is built from the categories that belong to that parent.
 
-You can see that logic in:
+That means:
 
-- `src/components/SearchHero.astro` for homepage search
-- `src/components/Sidebar.astro` for article and category page search
+- top-level grouping comes from `docsParentCategories`
+- section labels and slugs come from `docsCategories`
+- article ordering inside a section comes from each article's `order` frontmatter
 
-Each search entry includes:
+## Canonical routes and convenience routes
 
-- the article title
-- the description
-- the category slug
-- the generated URL
+Compass includes canonical nested article routes like `/getting-started/docs/manage-docs`, plus flatter convenience routes for some pages.
+
+The nested routes are the primary docs structure because they:
+
+- preserve the parent section in the URL
+- keep breadcrumbs predictable
+- make sidebar context clearer
 
 ## When to update what
 

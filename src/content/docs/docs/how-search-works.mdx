@@ -1,0 +1,56 @@
+---
+title: "How Search Works"
+description: "Understand how Compass uses Pagefind to generate scalable static search for your docs."
+category: "docs"
+order: 6
+updatedAt: 2026-06-04
+---
+
+Compass uses [Pagefind](https://pagefind.app/) for static full-text search. The search index is generated from the built HTML after Astro finishes its build, so Compass does not inline a giant search payload into every page.
+
+## The main files
+
+- `src/components/SearchHero.astro` for the homepage search UI
+- `src/components/Sidebar.astro` for the sidebar search UI
+- `src/scripts/docs-search.ts` for the shared Pagefind client logic
+- `package.json` for the build step that runs `pagefind --site dist`
+
+## Why Compass uses Pagefind
+
+Pagefind is a better fit for a growing docs site than shipping a full search index in page HTML.
+
+It helps because:
+
+- search indexing happens at build time
+- the browser loads small search chunks on demand
+- results include better excerpts and relevance than a simple `includes()` filter
+- the same search system can power both the hero search and sidebar search
+
+## What gets indexed
+
+Compass marks canonical article pages with `data-pagefind-body`, which tells Pagefind which HTML should become searchable.
+
+This keeps search focused on docs content rather than indexing:
+
+- duplicate route aliases
+- repeated sidebar navigation text
+- homepage marketing copy
+
+Compass also attaches article metadata for the category label so the custom search UI can show richer results.
+
+## Local search workflow
+
+Because Pagefind runs after the site build, the full search experience is available after:
+
+```bash
+npm run build
+npm run preview
+```
+
+During `npm run dev`, the site UI still works, but the generated Pagefind bundle does not exist yet.
+
+## When to customize search
+
+- change `src/scripts/docs-search.ts` when you want to change result rendering
+- change the search components when you want different layouts or messages
+- change the article templates when you want to adjust what Pagefind indexes

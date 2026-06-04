@@ -5,28 +5,25 @@ interface SidebarSection {
   href: string;
 }
 
-interface SearchEntry {
-  title: string;
-  description: string;
-  url: string;
-  category: string;
-}
-
 interface Props {
   sections: SidebarSection[];
   activeCategory?: string;
-  searchIndex: SearchEntry[];
 }
 
-const { sections, activeCategory, searchIndex } = Astro.props;
+const { sections, activeCategory } = Astro.props;
 ---
 
 <aside class="docs-sidebar w-full shrink-0 md:sticky md:top-24 md:w-72">
-  <div class="relative">
+  <div
+    class="relative"
+    data-docs-search
+    data-search-empty="No matching articles found."
+    data-search-error="Search is available after running npm run build and npm run preview."
+  >
     <input
-      id="docs-sidebar-search"
       type="search"
       placeholder="Search"
+      data-search-input
       class="sidebar-search-input w-full rounded-none border border-[var(--color-border-strong)] bg-[var(--color-surface)] py-3 pl-4 pr-10 text-sm text-[var(--color-search-text)] outline-none placeholder:text-[var(--color-search-placeholder)] focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
     />
     <div class="sidebar-search-icon pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-[var(--color-search-placeholder)]">
@@ -35,7 +32,7 @@ const { sections, activeCategory, searchIndex } = Astro.props;
       </svg>
     </div>
     <div
-      id="docs-sidebar-results"
+      data-search-results
       class="sidebar-search-results absolute left-0 right-0 top-full z-50 mt-2 hidden max-h-80 overflow-y-auto rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] text-left"
     ></div>
   </div>
@@ -65,53 +62,6 @@ const { sections, activeCategory, searchIndex } = Astro.props;
   </div>
 </aside>
 
-<script is:inline define:vars={{ searchIndex }}>
-  const sidebarInput = document.getElementById('docs-sidebar-search');
-  const sidebarResults = document.getElementById('docs-sidebar-results');
-
-  if (sidebarInput instanceof HTMLInputElement && sidebarResults instanceof HTMLDivElement) {
-    sidebarInput.addEventListener('input', () => {
-      const query = sidebarInput.value.toLowerCase().trim();
-
-      if (!query) {
-        sidebarResults.classList.add('hidden');
-        sidebarResults.innerHTML = '';
-        return;
-      }
-
-      const results = searchIndex
-        .filter((entry) =>
-          [entry.title, entry.description, entry.category].some((value) =>
-            value.toLowerCase().includes(query),
-          ),
-        )
-        .slice(0, 8);
-
-      sidebarResults.classList.remove('hidden');
-
-      if (results.length === 0) {
-        sidebarResults.innerHTML = '<p class="px-4 py-4 text-sm text-[var(--color-text-muted)]">No matching articles found.</p>';
-        return;
-      }
-
-      sidebarResults.innerHTML = results
-        .map(
-          (result) => `
-            <a href="${result.url}" class="block px-4 py-3 transition-colors hover:bg-[var(--color-hover-surface)]">
-              <div class="text-sm font-medium text-[var(--color-accent)]">${result.title}</div>
-              <div class="mt-1 text-xs text-[var(--color-text-muted)]">${result.category}${result.description ? ' - ' + result.description : ''}</div>
-            </a>
-          `,
-        )
-        .join('');
-    });
-
-    document.addEventListener('click', (event) => {
-      const target = event.target;
-      if (!(target instanceof Node)) return;
-      if (!sidebarInput.contains(target) && !sidebarResults.contains(target)) {
-        sidebarResults.classList.add('hidden');
-      }
-    });
-  }
+<script>
+  import '../scripts/docs-search';
 </script>

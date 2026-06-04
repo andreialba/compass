@@ -30,12 +30,6 @@ const sections = parent ? getCategoriesForParent(parent.slug).map((section) => (
   slug: section.slug,
   href: getCategoryHref(section.slug),
 })) : [];
-const searchIndex = allDocs.map((doc) => ({
-  title: doc.data.title,
-  description: doc.data.description ?? '',
-  category: docsCategoryDataMap[doc.data.category as keyof typeof docsCategoryDataMap]?.name ?? doc.data.category,
-  url: getArticleHref(doc.data.category, getCleanDocSlug(doc.id)),
-}));
 const categoryDocs = allDocs
   .filter((doc) => doc.data.category === category)
   .sort((a, b) => a.data.order - b.data.order);
@@ -47,7 +41,6 @@ const categoryDocs = allDocs
       <Sidebar
         sections={sections}
         activeCategory={subcategory?.slug}
-        searchIndex={searchIndex}
       />
     )}
 

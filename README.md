@@ -6,7 +6,7 @@
 [![MDX](https://img.shields.io/badge/MDX-Content_Collections-000000?style=for-the-badge&logo=mdx&logoColor=white)](https://docs.astro.build/en/guides/integrations-guide/mdx/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-84cc16?style=for-the-badge)](./LICENSE)
 
-Compass is a clean Astro documentation theme for product docs, support centers, and internal knowledge bases. It combines MDX content collections, category-driven navigation, built-in search, reusable content components, and a polished light/dark UI without pulling in a heavyweight docs framework.
+Compass is a clean Astro documentation theme for product docs, support centers, and internal knowledge bases. It combines MDX content collections, category-driven navigation, Pagefind-powered search, reusable content components, and a polished light/dark UI without pulling in a heavyweight docs framework.
 
 **Preview:** [https://compass-lilac-tau.vercel.app/](https://compass-lilac-tau.vercel.app/)
 
@@ -15,7 +15,7 @@ Compass is a clean Astro documentation theme for product docs, support centers, 
 - Built with Astro 6 and Tailwind CSS 4
 - MDX content collections for article authoring
 - Parent categories, sub-category pages, and article routes
-- Searchable docs landing page and sidebar search
+- Searchable docs landing page and sidebar search powered by Pagefind
 - Reusable docs components like callouts, tabs, steps, accordions, buttons, and quotes
 - Light and dark mode support
 - Shared site config for branding, links, and CTA text
@@ -30,6 +30,7 @@ Compass is a clean Astro documentation theme for product docs, support centers, 
 - `tailwindcss`
 - `@tailwindcss/typography`
 - `@fontsource-variable/manrope`
+- `pagefind`
 - `typescript`
 
 ## Quick Start
@@ -40,6 +41,8 @@ npm run dev
 ```
 
 Open `http://localhost:3000`.
+
+Search is generated during `npm run build`, so use `npm run preview` when you want to test the full search experience locally.
 
 Useful scripts:
 
@@ -134,7 +137,7 @@ If you add your own Astro component, register it there to make it available insi
 
 - `site.config.mjs` still contains placeholder URLs by default.
 - `astro.config.mjs` uses the value from `site.config.mjs` for the canonical site URL.
-- `npm run build` generates a static site and sitemap output.
+- `npm run build` generates the static site, sitemap, and Pagefind search bundle.
 - If you plan to publish this package, update the package metadata in `package.json`.
 
 ## License

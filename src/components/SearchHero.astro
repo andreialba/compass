@@ -1,7 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
-import { getArticleHref, getCleanDocSlug } from '../data/docs';
-
 interface Props {
   title?: string;
   placeholder?: string;
@@ -11,33 +8,26 @@ const {
   title = 'How can we help?',
   placeholder = 'Search the docs...',
 } = Astro.props;
-
-const allDocs = await getCollection('docs');
-const searchIndex = allDocs.map((doc) => {
-  const cleanSlug = getCleanDocSlug(doc.id);
-
-  return {
-    title: doc.data.title,
-    description: doc.data.description ?? '',
-    category: doc.data.category,
-    url: getArticleHref(doc.data.category, cleanSlug),
-  };
-});
 ---
 
 <section class="search-hero bg-[var(--color-surface)] py-14 md:py-16">
   <div class="mx-auto w-full max-w-[1280px] px-4 text-center md:px-8">
     <h1 class="search-hero-title mb-6 text-4xl font-extrabold tracking-tight text-[var(--color-text-strong)] md:text-5xl">{title}</h1>
 
-    <div class="relative mx-auto w-full max-w-[600px]">
+    <div
+      class="relative mx-auto w-full max-w-[600px]"
+      data-docs-search
+      data-search-empty="No matching articles yet."
+      data-search-error="Search is available after running npm run build and npm run preview."
+    >
       <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-[var(--color-search-placeholder)]">
         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />
         </svg>
       </div>
       <input
-        id="search-input"
         type="text"
+        data-search-input
         class="search-input block w-full rounded-none border border-[var(--color-border-strong)] bg-[var(--color-surface)] py-4 pl-12 pr-28 text-lg text-[var(--color-search-text)] outline-none transition-all placeholder:text-[var(--color-search-placeholder)] focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
         placeholder={placeholder}
         autocomplete="off"
@@ -46,60 +36,13 @@ const searchIndex = allDocs.map((doc) => {
         Search
       </button>
       <div
-        id="search-results"
+        data-search-results
         class="search-results absolute left-0 right-0 top-full z-50 mt-2 hidden max-h-96 overflow-y-auto rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] text-left"
       ></div>
     </div>
   </div>
 </section>
 
-<script is:inline define:vars={{ searchIndex }}>
-  const input = document.getElementById('search-input');
-  const resultsContainer = document.getElementById('search-results');
-
-  if (input instanceof HTMLInputElement && resultsContainer instanceof HTMLDivElement) {
-    input.addEventListener('input', () => {
-      const query = input.value.toLowerCase().trim();
-
-      if (!query) {
-        resultsContainer.classList.add('hidden');
-        resultsContainer.innerHTML = '';
-        return;
-      }
-
-      const results = searchIndex
-        .filter((doc) =>
-          [doc.title, doc.description, doc.category].some((value) =>
-            value.toLowerCase().includes(query),
-          ),
-        )
-        .slice(0, 8);
-
-      resultsContainer.classList.remove('hidden');
-
-      if (results.length === 0) {
-        resultsContainer.innerHTML = '<p class="px-4 py-5 text-sm text-[var(--color-text-muted)]">No matching articles yet.</p>';
-        return;
-      }
-
-      resultsContainer.innerHTML = results
-        .map(
-          (result) => `
-            <a href="${result.url}" class="block px-4 py-3 transition-colors hover:bg-[var(--color-hover-surface)]">
-              <div class="search-result-title text-sm font-medium text-[var(--color-accent)]">${result.title}</div>
-              <div class="mt-1 text-xs text-[var(--color-text-muted)]">${result.category.replace(/-/g, ' ')}${result.description ? ' - ' + result.description : ''}</div>
-            </a>
-          `,
-        )
-        .join('');
-    });
-
-    document.addEventListener('click', (event) => {
-      const target = event.target;
-      if (!(target instanceof Node)) return;
-      if (!input.contains(target) && !resultsContainer.contains(target)) {
-        resultsContainer.classList.add('hidden');
-      }
-    });
-  }
+<script>
+  import '../scripts/docs-search';
 </script>
