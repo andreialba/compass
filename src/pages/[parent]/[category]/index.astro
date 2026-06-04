@@ -45,7 +45,7 @@ const categoryDocs = allDocs
     )}
 
     <div class="min-w-0 flex-1">
-      <section class="site-panel rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-10">
+      <section class="site-panel rounded-[15px] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-10">
         <nav class="docs-breadcrumbs mb-6 flex flex-wrap items-center gap-2 text-sm text-[var(--color-text-muted)]">
           <a href="/" class="breadcrumb-link transition hover:text-[var(--color-accent)]">Home</a>
           <span>/</span>
@@ -60,7 +60,7 @@ const categoryDocs = allDocs
         </p>
 
         {categoryDocs.length === 0 ? (
-          <div class="category-empty mt-10 rounded-none bg-[var(--color-surface-muted)] px-6 py-14 text-center text-[var(--color-text-muted)]">
+          <div class="category-empty mt-10 rounded-[15px] bg-[var(--color-surface-muted)] px-6 py-14 text-center text-[var(--color-text-muted)]">
             No articles yet. Add MDX files in <code>src/content/docs/{category}</code> to populate this section.
           </div>
         ) : (

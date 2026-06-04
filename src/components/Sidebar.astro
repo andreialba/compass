@@ -24,7 +24,7 @@ const { sections, activeCategory } = Astro.props;
       type="search"
       placeholder="Search"
       data-search-input
-      class="sidebar-search-input w-full rounded-none border border-[var(--color-border-strong)] bg-[var(--color-surface)] py-3 pl-4 pr-10 text-sm text-[var(--color-search-text)] outline-none placeholder:text-[var(--color-search-placeholder)] focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
+      class="sidebar-search-input w-full rounded-[15px] border border-[var(--color-border-strong)] bg-[var(--color-surface)] py-3 pl-4 pr-10 text-sm text-[var(--color-search-text)] outline-none placeholder:text-[var(--color-search-placeholder)] focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
     />
     <div class="sidebar-search-icon pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-[var(--color-search-placeholder)]">
       <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
@@ -33,7 +33,7 @@ const { sections, activeCategory } = Astro.props;
     </div>
     <div
       data-search-results
-      class="sidebar-search-results absolute left-0 right-0 top-full z-50 mt-2 hidden max-h-80 overflow-y-auto rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] text-left"
+      class="sidebar-search-results absolute left-0 right-0 top-full z-50 mt-2 hidden max-h-80 overflow-y-auto rounded-[15px] border border-[var(--color-border)] bg-[var(--color-surface)] text-left"
     ></div>
   </div>
 
@@ -47,7 +47,7 @@ const { sections, activeCategory } = Astro.props;
           <li>
             <a
               href={section.href}
-              class={`sidebar-link block rounded-none px-3 py-2.5 text-sm font-medium transition ${
+              class={`sidebar-link block rounded-[15px] px-3 py-2.5 text-sm font-medium transition ${
                 isActiveSection
                   ? 'is-active text-[var(--color-accent)]'
                   : 'text-[var(--color-text)] hover:bg-[var(--color-hover-surface)] hover:text-[var(--color-text-strong)]'

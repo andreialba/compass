@@ -28,16 +28,16 @@ const {
       <input
         type="text"
         data-search-input
-        class="search-input block w-full rounded-none border border-[var(--color-border-strong)] bg-[var(--color-surface)] py-4 pl-12 pr-28 text-lg text-[var(--color-search-text)] outline-none transition-all placeholder:text-[var(--color-search-placeholder)] focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
+        class="search-input block w-full rounded-[15px] border border-[var(--color-border-strong)] bg-[var(--color-surface)] py-4 pl-12 pr-28 text-lg text-[var(--color-search-text)] outline-none transition-all placeholder:text-[var(--color-search-placeholder)] focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20"
         placeholder={placeholder}
         autocomplete="off"
       />
-      <button class="search-submit absolute bottom-2 right-2 top-2 cursor-pointer rounded-none bg-[var(--color-brand)] px-6 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)]">
+      <button class="search-submit absolute bottom-2 right-2 top-2 cursor-pointer rounded-[15px] bg-[var(--color-brand)] px-6 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)]">
         Search
       </button>
       <div
         data-search-results
-        class="search-results absolute left-0 right-0 top-full z-50 mt-2 hidden max-h-96 overflow-y-auto rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] text-left"
+        class="search-results absolute left-0 right-0 top-full z-50 mt-2 hidden max-h-96 overflow-y-auto rounded-[15px] border border-[var(--color-border)] bg-[var(--color-surface)] text-left"
       ></div>
     </div>
   </div>

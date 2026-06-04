@@ -43,7 +43,7 @@ function isActiveNavItem(href: string) {
     <div class="hidden items-center gap-3 lg:flex">
       <button
         type="button"
-        class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-none bg-transparent text-[var(--color-control-text)] transition hover:bg-transparent"
+        class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-[15px] bg-transparent text-[var(--color-control-text)] transition hover:bg-transparent"
         aria-label="Toggle dark mode"
         title="Toggle dark mode"
       >
@@ -59,7 +59,7 @@ function isActiveNavItem(href: string) {
         href={site.navCtaHref}
         target="_blank"
         rel="noreferrer"
-        class="hidden rounded-none bg-[var(--color-brand)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)] lg:inline-flex"
+        class="hidden rounded-[15px] bg-[var(--color-brand)] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)] lg:inline-flex"
       >
         {site.navCtaLabel}
       </a>
@@ -68,7 +68,7 @@ function isActiveNavItem(href: string) {
     <div class="flex items-center gap-2 lg:hidden">
       <button
         type="button"
-        class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-none bg-transparent text-[var(--color-control-text)] transition hover:bg-transparent"
+        class="theme-toggle inline-flex h-10 w-10 items-center justify-center rounded-[15px] bg-transparent text-[var(--color-control-text)] transition hover:bg-transparent"
         aria-label="Toggle dark mode"
         title="Toggle dark mode"
       >
@@ -83,7 +83,7 @@ function isActiveNavItem(href: string) {
       <button
         id="mobile-menu-toggle"
         type="button"
-        class="inline-flex h-10 w-10 items-center justify-center rounded-none border border-[var(--color-border)] bg-[var(--color-surface-muted)] text-[var(--color-control-text)] transition hover:bg-[var(--color-hover-surface)]"
+        class="inline-flex h-10 w-10 items-center justify-center rounded-[15px] border border-[var(--color-border)] bg-[var(--color-surface-muted)] text-[var(--color-control-text)] transition hover:bg-[var(--color-hover-surface)]"
         aria-expanded="false"
         aria-controls="mobile-menu-panel"
         aria-label="Toggle menu"
@@ -108,7 +108,7 @@ function isActiveNavItem(href: string) {
                 href={href}
                 aria-current={isActive ? 'page' : undefined}
                 class:list={[
-                  'block w-full rounded-none px-4 py-3 text-sm font-medium transition-colors',
+                  'block w-full rounded-[15px] px-4 py-3 text-sm font-medium transition-colors',
                   isActive
                     ? 'bg-[var(--color-hover-surface)] text-[var(--color-accent)]'
                     : 'text-[var(--color-text)] hover:bg-[var(--color-hover-surface)] hover:text-[var(--color-accent)]',
@@ -126,7 +126,7 @@ function isActiveNavItem(href: string) {
           href={site.navCtaHref}
           target="_blank"
           rel="noreferrer"
-          class="inline-flex w-full items-center justify-center rounded-none bg-[var(--color-brand)] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)]"
+          class="inline-flex w-full items-center justify-center rounded-[15px] bg-[var(--color-brand)] px-4 py-3 text-sm font-semibold text-white transition-colors hover:bg-[var(--color-brand-hover)]"
         >
           {site.navCtaLabel}
         </a>

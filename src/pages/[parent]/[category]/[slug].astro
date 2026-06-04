@@ -55,7 +55,7 @@ const sidebarSections = getCategoriesForParent(parent.slug).map((section) => ({
       </nav>
 
       <article
-        class="site-panel docs-article rounded-none border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-10"
+        class="site-panel docs-article rounded-[15px] border border-[var(--color-border)] bg-[var(--color-surface)] p-8 md:p-10"
         data-pagefind-body
         data-pagefind-meta={`category:${pagefindCategory}`}
       >
@@ -83,6 +83,7 @@ const sidebarSections = getCategoriesForParent(parent.slug).map((section) => ({
 </Layout>
 
 <script is:inline>
+  const articleRoot = document.querySelector('.docs-article');
   const codeLanguageLabels = {
     astro: 'Astro',
     bash: 'Bash',
@@ -184,4 +185,117 @@ const sidebarSections = getCategoriesForParent(parent.slug).map((section) => ({
 
     shell.append(copyButton);
   });
+
+  if (articleRoot instanceof HTMLElement) {
+    const lightboxOverlay = document.createElement('div');
+    lightboxOverlay.className = 'docs-lightbox-overlay';
+    lightboxOverlay.hidden = true;
+    lightboxOverlay.setAttribute('aria-hidden', 'true');
+
+    const lightboxBackdrop = document.createElement('button');
+    lightboxBackdrop.type = 'button';
+    lightboxBackdrop.className = 'docs-lightbox-backdrop';
+    lightboxBackdrop.setAttribute('aria-label', 'Close expanded image');
+
+    const lightboxDialog = document.createElement('div');
+    lightboxDialog.className = 'docs-lightbox-dialog';
+    lightboxDialog.setAttribute('role', 'dialog');
+    lightboxDialog.setAttribute('aria-modal', 'true');
+    lightboxDialog.setAttribute('aria-label', 'Expanded article image');
+    lightboxDialog.tabIndex = -1;
+
+    const lightboxClose = document.createElement('button');
+    lightboxClose.type = 'button';
+    lightboxClose.className = 'docs-lightbox-close';
+    lightboxClose.setAttribute('aria-label', 'Close expanded image');
+    lightboxClose.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m8 8 8 8M16 8l-8 8"></path>
+      </svg>
+    `;
+
+    const lightboxFigure = document.createElement('figure');
+    lightboxFigure.className = 'docs-lightbox-figure';
+
+    const lightboxImage = document.createElement('img');
+    lightboxImage.className = 'docs-lightbox-image';
+    lightboxImage.alt = '';
+
+    const lightboxCaption = document.createElement('figcaption');
+    lightboxCaption.className = 'docs-lightbox-caption';
+    lightboxCaption.hidden = true;
+
+    lightboxFigure.append(lightboxImage, lightboxCaption);
+    lightboxDialog.append(lightboxClose, lightboxFigure);
+    lightboxOverlay.append(lightboxBackdrop, lightboxDialog);
+    document.body.append(lightboxOverlay);
+
+    let lastTrigger = null;
+
+    const closeLightbox = () => {
+      lightboxOverlay.hidden = true;
+      lightboxOverlay.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      lightboxImage.removeAttribute('src');
+      lightboxImage.removeAttribute('srcset');
+      if (lastTrigger instanceof HTMLElement) lastTrigger.focus();
+      lastTrigger = null;
+    };
+
+    const openLightbox = (trigger, image) => {
+      const source = image.currentSrc || image.src;
+      if (!source) return;
+
+      const alt = image.getAttribute('alt') ?? '';
+      lastTrigger = trigger;
+      lightboxImage.src = source;
+      if (image.srcset) {
+        lightboxImage.srcset = image.srcset;
+        lightboxImage.sizes = '100vw';
+      } else {
+        lightboxImage.removeAttribute('srcset');
+        lightboxImage.removeAttribute('sizes');
+      }
+      lightboxImage.alt = alt;
+      lightboxCaption.textContent = alt;
+      lightboxCaption.hidden = !alt;
+      lightboxOverlay.hidden = false;
+      lightboxOverlay.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      lightboxDialog.focus();
+    };
+
+    const contentImages = articleRoot.querySelectorAll('img');
+
+    contentImages.forEach((image) => {
+      if (!(image instanceof HTMLImageElement)) return;
+      if (image.closest('.docs-lightbox-overlay')) return;
+      if (image.closest('a, button')) return;
+
+      const media = image.closest('picture') ?? image;
+      if (!(media instanceof HTMLElement) || media.parentElement?.classList.contains('docs-lightbox-trigger')) return;
+
+      image.dataset.lightboxImage = 'true';
+      const trigger = document.createElement('button');
+      trigger.type = 'button';
+      trigger.className = 'docs-lightbox-trigger';
+      trigger.setAttribute('aria-label', `Expand image${image.alt ? `: ${image.alt}` : ''}`);
+
+      const parent = media.parentNode;
+      if (!parent) return;
+
+      parent.insertBefore(trigger, media);
+      trigger.append(media);
+      trigger.addEventListener('click', () => openLightbox(trigger, image));
+    });
+
+    lightboxBackdrop.addEventListener('click', closeLightbox);
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxOverlay.addEventListener('click', (event) => {
+      if (event.target === lightboxOverlay) closeLightbox();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (!lightboxOverlay.hidden && event.key === 'Escape') closeLightbox();
+    });
+  }
 </script>
