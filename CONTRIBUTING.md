@@ -55,10 +55,20 @@ Each article should include frontmatter similar to:
 title: "Article Title"
 description: "Short summary of the article."
 category: "start-here"
+tags: ["setup"]
+status: "published"
+author: "Docs Team"
 order: 1
 updatedAt: 2026-06-03
 ---
 ```
+
+Optional frontmatter fields you can use when helpful:
+
+- `editUrl` for contributor-facing edit links on article pages
+- `heroImage` for top-of-page article imagery
+- `hideFromSearch` for pages that should stay out of Pagefind results
+- `redirectFrom` for legacy routes that should point to the canonical article URL
 
 ## Pull Request Notes
 

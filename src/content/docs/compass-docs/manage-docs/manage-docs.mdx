@@ -2,6 +2,10 @@
 title: "Manage Docs"
 description: "Maintain collections, navigation order, and article publishing workflows."
 category: "compass-docs"
+tags: ["maintenance", "frontmatter"]
+status: "published"
+author: "Compass Team"
+editUrl: "https://github.com/andreialba/compass/edit/main/src/content/docs/compass-docs/manage-docs/manage-docs.mdx"
 order: 2
 updatedAt: 2026-06-03
 ---
@@ -21,6 +25,20 @@ Edit `src/data/docs.ts` when you need to:
 
 Inside each article, the `order` field controls its position within a category. Lower numbers appear first.
 
+## Use frontmatter for maintenance metadata
+
+Compass now supports a wider set of article metadata in `src/content.config.ts`:
+
+- `tags` for grouping and future filtering
+- `status` for content lifecycle tracking
+- `author` for clear ownership
+- `editUrl` for direct contribution links
+- `heroImage` for article header visuals
+- `hideFromSearch` when a page should stay out of search results
+- `redirectFrom` when an old route should forward to a new one
+
+This keeps maintenance decisions inside the article itself instead of scattering notes across separate spreadsheets or docs.
+
 ## Keep routes predictable
 
 Compass generates article slugs from the article filename, so it helps to keep names short and descriptive:
@@ -35,6 +53,8 @@ Use the same slug for the folder and the article file so routes stay obvious:
 - `design-tokens/design-tokens.mdx` -> `/getting-started/compass-docs/design-tokens`
 
 This works well when the folder also contains screenshots or diagrams for that article.
+
+If you do rename a slug later, add the previous URL to `redirectFrom` so old links continue to resolve.
 
 ## Match folders to category slugs
 

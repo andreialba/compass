@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import { getArticleHref, getCleanDocSlug } from '../data/docs';
+
+type RedirectEntry = {
+  redirect: string;
+  destination: string;
+};
+
+const normalizePath = (value: string) => {
+  const trimmed = value.trim();
+  if (!trimmed) return '';
+
+  const withLeadingSlash = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+  return withLeadingSlash === '/' ? withLeadingSlash : withLeadingSlash.replace(/\/+$/, '');
+};
+
+export async function getStaticPaths() {
+  const allDocs = await getCollection('docs');
+  const redirects = new Map<string, RedirectEntry>();
+
+  allDocs.forEach((doc) => {
+    const destination = getArticleHref(doc.data.category, getCleanDocSlug(doc.id));
+
+    doc.data.redirectFrom.forEach((rawRedirect) => {
+      const redirect = normalizePath(rawRedirect);
+      if (!redirect || redirect === destination) return;
+
+      redirects.set(redirect, {
+        redirect,
+        destination,
+      });
+    });
+  });
+
+  return Array.from(redirects.values()).map(({ redirect, destination }) => ({
+    params: {
+      redirect: redirect.replace(/^\//, ''),
+    },
+    props: {
+      destination,
+    },
+  }));
+}
+
+const { destination } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0;url=${destination}`} />
+    <link rel="canonical" href={destination} />
+    <title>Redirecting...</title>
+    <script is:inline define:vars={{ destination }}>
+      window.location.replace(destination);
+    </script>
+  </head>
+  <body>
+    <p>Redirecting to <a href={destination}>{destination}</a>.</p>
+  </body>
+</html>

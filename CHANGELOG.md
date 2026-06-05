@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project follows semantic versioning when tagged or released.
 
+## [0.1.3] - 2026-06-05
+
+### Added
+- On-page table of contents for article headings, styled as a lightweight docs navigation rail.
+- Expanded docs frontmatter support for tags, status, author, edit links, hero images, search opt-out, and redirect aliases.
+- Redirect alias generation for docs pages via `redirectFrom` frontmatter.
+
+### Changed
+- Article pages now support optional hero images and "Edit this page" links from frontmatter.
+- Hidden docs are excluded from suggested article search prompts and the Pagefind indexed article set.
+- Moved article metadata like "Updated" and "Edit this page" below the article panel while keeping previous/next navigation inside the content card.
+- Updated starter docs, README, and contributing guidance to document the new frontmatter workflow.
+
 ## [0.1.2] - 2026-06-05
 
 ### Added

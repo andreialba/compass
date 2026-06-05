@@ -85,6 +85,7 @@ type SearchSuggestionSource = {
     description?: string;
     category: string;
     order?: number;
+    hideFromSearch?: boolean;
   };
 };
 
@@ -133,6 +134,7 @@ export function getSuggestedSearchArticles(
   const allowedCategories = new Set(categories);
 
   return docs
+    .filter((doc) => !doc.data.hideFromSearch)
     .filter((doc) => allowedCategories.has(doc.data.category))
     .sort((a, b) => {
       const categoryIndexDifference = categories.indexOf(a.data.category) - categories.indexOf(b.data.category);

@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import Sidebar from '../../../components/Sidebar.astro';
 import { mdxComponents } from '../../../components/docs/mdx-components';
@@ -30,7 +31,7 @@ export async function getStaticPaths() {
 
 const { doc } = Astro.props;
 const allDocs = await getCollection('docs');
-const { Content } = await render(doc);
+const { Content, headings } = await render(doc);
 const categoryData = docsCategoryDataMap[doc.data.category as keyof typeof docsCategoryDataMap];
 const parent = docsParentMap[categoryData.parent as keyof typeof docsParentMap];
 const pagefindCategory = categoryData?.name ?? doc.data.category;
@@ -48,6 +49,16 @@ const suggestedArticles = getSuggestedSearchArticles(allDocs, {
   categories: [doc.data.category],
 });
 const searchPreviews = getSearchPreviewLookup(allDocs);
+const tocHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+const articlePagefindAttributes = doc.data.hideFromSearch
+  ? {
+      'data-pagefind-meta': `category:${pagefindCategory}`,
+      'data-pagefind-ignore': 'all',
+    }
+  : {
+      'data-pagefind-body': true,
+      'data-pagefind-meta': `category:${pagefindCategory}`,
+    };
 ---
 
 <Layout title={`${doc.data.title} | ${categoryData?.name ?? doc.data.category}`} description={doc.data.description}>
@@ -72,66 +83,140 @@ const searchPreviews = getSearchPreviewLookup(allDocs);
 
       <article
         class="site-panel docs-article rounded-[15px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 lg:p-10"
-        data-pagefind-body
-        data-pagefind-meta={`category:${pagefindCategory}`}
+        {...articlePagefindAttributes}
       >
         <h1 class="text-4xl font-semibold tracking-tight text-[var(--color-text-strong)] lg:text-5xl">{doc.data.title}</h1>
         {doc.data.description && (
           <p class="mt-5 max-w-2xl text-base leading-7 text-[var(--color-text)]">{doc.data.description}</p>
         )}
 
+        {doc.data.heroImage && (
+          <div class="mt-8 overflow-hidden rounded-[15px] border border-[var(--color-border)] bg-[var(--color-surface-muted)]">
+            <Image
+              src={doc.data.heroImage}
+              alt=""
+              class="docs-article-hero h-auto w-full"
+              widths={[900, 1400]}
+              sizes="(min-width: 1024px) 900px, 100vw"
+            />
+          </div>
+        )}
+
+        {(doc.data.author || doc.data.status || doc.data.tags.length > 0) && (
+          <div class="sr-only" data-pagefind-ignore>
+            {doc.data.author && (
+              <span data-pagefind-filter={`author:${doc.data.author}`} data-pagefind-meta={`author:${doc.data.author}`}>
+                {doc.data.author}
+              </span>
+            )}
+            {doc.data.status && (
+              <span data-pagefind-filter={`status:${doc.data.status}`} data-pagefind-meta={`status:${doc.data.status}`}>
+                {doc.data.status}
+              </span>
+            )}
+            {doc.data.tags.map((tag) => (
+              <span data-pagefind-filter={`tag:${tag}`}>{tag}</span>
+            ))}
+          </div>
+        )}
+
+        {tocHeadings.length > 0 && (
+          <nav
+            class="docs-toc mt-8 rounded-[15px]"
+            aria-label="Table of contents"
+          >
+            <p class="docs-toc-title">On this page</p>
+            <ol class="docs-toc-list mt-4">
+              {tocHeadings.map((heading) => (
+                <li>
+                  <a
+                    href={`#${heading.slug}`}
+                    class:list={[
+                      'docs-toc-link',
+                      heading.depth === 3 && 'docs-toc-link-subheading',
+                    ]}
+                  >
+                    {heading.text}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+
         <div class="prose mt-10 max-w-none prose-headings:font-semibold prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:text-[var(--color-accent-hover)] prose-code:rounded prose-code:bg-[var(--color-inline-code-bg)] prose-code:px-1 prose-code:py-0.5 prose-code:text-[var(--color-inline-code-fg)] prose-pre:bg-transparent prose-pre:p-0">
           <Content components={mdxComponents} />
         </div>
 
-        {doc.data.updatedAt && (
-          <p class="mt-10 pt-6 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-text-soft)]">
-            Updated {doc.data.updatedAt.toLocaleDateString('en-US', {
-              month: 'long',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </p>
-        )}
-
         {(previousDoc || nextDoc) && (
-          <nav class="docs-article-pagination mt-10 border-t border-[var(--color-border)] pt-6" aria-label="Article navigation">
-            <div class="grid gap-4 md:grid-cols-2">
-              {previousDoc ? (
-                <a
-                  href={getArticleHref(previousDoc.data.category, getCleanDocSlug(previousDoc.id))}
-                  class="docs-article-pagination-link"
-                >
-                  <span class="docs-article-pagination-label">
-                    <svg class="docs-article-pagination-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <use href="/icons/docs-navigation.svg#arrow-left"></use>
-                    </svg>
-                    Previous article
-                  </span>
-                  <span class="docs-article-pagination-title">{previousDoc.data.title}</span>
-                </a>
-              ) : (
-                <div class="hidden md:block"></div>
-              )}
+          <section class="docs-article-footer mt-12 border-t border-[var(--color-border)] pt-8">
+            {(previousDoc || nextDoc) && (
+              <nav class="docs-article-pagination" aria-label="Article navigation">
+                <div class="grid gap-4 md:grid-cols-2">
+                  {previousDoc ? (
+                    <a
+                      href={getArticleHref(previousDoc.data.category, getCleanDocSlug(previousDoc.id))}
+                      class="docs-article-pagination-link"
+                    >
+                      <span class="docs-article-pagination-label">
+                        <svg class="docs-article-pagination-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <use href="/icons/docs-navigation.svg#arrow-left"></use>
+                        </svg>
+                        Previous article
+                      </span>
+                      <span class="docs-article-pagination-title">{previousDoc.data.title}</span>
+                    </a>
+                  ) : (
+                    <div class="hidden md:block"></div>
+                  )}
 
-              {nextDoc && (
-                <a
-                  href={getArticleHref(nextDoc.data.category, getCleanDocSlug(nextDoc.id))}
-                  class="docs-article-pagination-link docs-article-pagination-link-next"
-                >
-                  <span class="docs-article-pagination-label">
-                    Next article
-                    <svg class="docs-article-pagination-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <use href="/icons/docs-navigation.svg#arrow-right"></use>
-                    </svg>
-                  </span>
-                  <span class="docs-article-pagination-title">{nextDoc.data.title}</span>
-                </a>
-              )}
-            </div>
-          </nav>
+                  {nextDoc && (
+                    <a
+                      href={getArticleHref(nextDoc.data.category, getCleanDocSlug(nextDoc.id))}
+                      class="docs-article-pagination-link docs-article-pagination-link-next"
+                    >
+                      <span class="docs-article-pagination-label">
+                        Next article
+                        <svg class="docs-article-pagination-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                          <use href="/icons/docs-navigation.svg#arrow-right"></use>
+                        </svg>
+                      </span>
+                      <span class="docs-article-pagination-title">{nextDoc.data.title}</span>
+                    </a>
+                  )}
+                </div>
+              </nav>
+            )}
+          </section>
         )}
       </article>
+
+      {(doc.data.updatedAt || doc.data.editUrl) && (
+        <div class="docs-article-meta mt-5 flex flex-col gap-3 px-1 sm:flex-row sm:items-center sm:justify-between">
+          {doc.data.updatedAt ? (
+            <p class="docs-article-meta-copy">
+              Updated {doc.data.updatedAt.toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              })}
+            </p>
+          ) : (
+            <div></div>
+          )}
+
+          {doc.data.editUrl && (
+            <a
+              href={doc.data.editUrl}
+              target="_blank"
+              rel="noreferrer"
+              class="docs-article-meta-link"
+            >
+              Edit this page
+            </a>
+          )}
+        </div>
+      )}
     </div>
   </div>
 </Layout>

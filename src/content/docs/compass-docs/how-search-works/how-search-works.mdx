@@ -2,6 +2,10 @@
 title: "How Search Works"
 description: "Understand how Compass uses Pagefind to generate scalable static search for your docs."
 category: "compass-docs"
+tags: ["search", "pagefind"]
+status: "published"
+author: "Compass Team"
+editUrl: "https://github.com/andreialba/compass/edit/main/src/content/docs/compass-docs/how-search-works/how-search-works.mdx"
 order: 6
 updatedAt: 2026-06-04
 ---
@@ -37,6 +41,14 @@ This keeps search focused on docs content rather than indexing:
 - homepage marketing copy
 
 Compass also attaches article metadata for the category label, while the custom search UI uses each article's frontmatter `description` as the preview snippet.
+
+If an article should not appear in search, set:
+
+```mdx
+hideFromSearch: true
+```
+
+Compass will omit that page from the indexed article set and keep it out of suggested search prompts.
 
 ## Local search workflow
 

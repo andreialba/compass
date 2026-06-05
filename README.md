@@ -17,6 +17,7 @@ Compass is a clean Astro documentation theme for product docs, support centers, 
 - Built with Astro 6 and Tailwind CSS 4
 - MDX content collections for article authoring
 - Parent categories, sub-category pages, and article routes
+- Expanded article frontmatter for tags, status, edit links, hero images, redirects, and search visibility
 - Previous and next article navigation within each docs section
 - Searchable docs landing page and sidebar search powered by Pagefind
 - Reusable docs components like callouts, tabs, steps, accordions, checklists, buttons, and quotes
@@ -95,12 +96,29 @@ Inside that article file, use frontmatter like this:
 title: "Set Up Compass"
 description: "Start customizing the theme and content structure."
 category: "start-here"
+tags: ["setup", "branding"]
+status: "published"
+author: "Docs Team"
+editUrl: "https://github.com/your-org/your-repo/edit/main/src/content/docs/start-here/set-up-compass/set-up-compass.mdx"
+heroImage: "./hero.png"
+redirectFrom:
+  - "/start-here/getting-started"
 order: 1
 updatedAt: 2026-06-03
 ---
 
 ## Add your content here
 ```
+
+Useful optional frontmatter fields:
+
+- `tags` for future filters, grouping, or editorial workflows
+- `status` for lifecycle states like `draft`, `published`, `deprecated`, or `archived`
+- `author` for ownership metadata
+- `editUrl` to show an "Edit this page" link on article pages
+- `heroImage` for a top-of-page article image loaded through Astro's image pipeline
+- `hideFromSearch` to keep a page out of the Pagefind index
+- `redirectFrom` to generate redirect aliases for renamed or moved docs routes
 
 If an article includes screenshots or diagrams, keep them beside the article entry:
 

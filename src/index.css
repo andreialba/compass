@@ -500,6 +500,90 @@ html.dark .astro-code[data-language='text'] span {
   color: var(--color-link-subtle);
 }
 
+.docs-toc {
+  position: relative;
+  max-width: 22rem;
+  padding: 0.15rem 0 0;
+}
+
+.docs-toc-title {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+}
+
+.docs-toc-list {
+  position: relative;
+  margin: 0;
+  padding: 0.75rem 0 0 0.95rem;
+  list-style: none;
+}
+
+.docs-toc-list::before {
+  content: '';
+  position: absolute;
+  top: 0.2rem;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: color-mix(in srgb, var(--color-border) 92%, transparent);
+}
+
+.docs-toc-list li + li {
+  margin-top: 0.22rem;
+}
+
+.docs-toc-link {
+  position: relative;
+  display: block;
+  padding: 0.08rem 0 0.08rem 0.55rem;
+  color: var(--color-text);
+  font-size: 0.98rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.docs-toc-link::before {
+  content: '';
+  position: absolute;
+  top: 0.2rem;
+  bottom: 0.2rem;
+  left: -0.95rem;
+  width: 2px;
+  border-radius: 999px;
+  background: transparent;
+}
+
+.docs-toc-link:hover {
+  color: var(--color-accent);
+}
+
+.docs-toc-link:hover::before {
+  background: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+
+.docs-toc-link-subheading {
+  padding-left: 1.15rem;
+  color: var(--color-text-muted);
+  font-size: 0.92rem;
+}
+
+.docs-toc-link-subheading::before {
+  left: -0.95rem;
+  width: 1px;
+}
+
+@media (min-width: 768px) {
+  .docs-toc {
+    margin-left: 0.1rem;
+  }
+}
+
 .docs-article-link:hover,
 .docs-article-list-link:hover {
   color: var(--color-accent);
@@ -558,6 +642,26 @@ html.dark .astro-code[data-language='text'] span {
   width: 0.95rem;
   height: 0.95rem;
   flex: none;
+}
+
+.docs-article-meta-copy {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-soft);
+}
+
+.docs-article-meta-link {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.docs-article-meta-link:hover {
+  color: var(--color-accent);
 }
 
 @media (min-width: 768px) {

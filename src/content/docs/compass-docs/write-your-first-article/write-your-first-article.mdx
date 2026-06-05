@@ -2,6 +2,10 @@
 title: "Write Your First Article"
 description: "Create a real Compass article, connect it to a category, and see how it appears across the site."
 category: "compass-docs"
+tags: ["authoring", "frontmatter"]
+status: "published"
+author: "Compass Team"
+editUrl: "https://github.com/andreialba/compass/edit/main/src/content/docs/compass-docs/write-your-first-article/write-your-first-article.mdx"
 order: 1
 updatedAt: 2026-06-03
 ---
@@ -21,10 +25,27 @@ Use frontmatter to define how the article is listed:
 title: "Deploy Compass"
 description: "Publish your docs site to your hosting platform."
 category: "compass-docs"
+tags: ["deployment", "hosting"]
+status: "published"
+author: "Docs Team"
+editUrl: "https://github.com/your-org/your-repo/edit/main/src/content/docs/compass-docs/deploy-compass/deploy-compass.mdx"
+heroImage: "./deploy-hero.png"
+redirectFrom:
+  - "/getting-started/compass-docs/publish-docs"
 order: 5
 updatedAt: 2026-06-03
 ---
 ```
+
+The required fields are still `title` and `category`, but the optional fields above unlock a lot of useful workflow metadata:
+
+- `tags` let you group related docs or prepare future search filters
+- `status` helps call out drafts, deprecated guides, or archived content
+- `author` shows who owns the article metadata
+- `editUrl` powers an "Edit this page" link at the bottom of the article
+- `heroImage` renders a header image from the article folder through Astro's image pipeline
+- `redirectFrom` keeps old doc links working after a rename or move
+- `hideFromSearch: true` keeps a page out of the generated search index
 
 ## Add the body content
 
