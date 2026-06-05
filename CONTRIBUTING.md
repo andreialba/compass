@@ -44,6 +44,7 @@ npm run clean
 - Run `npm run build` if your change affects search, routes, metadata, or generated output.
 - Verify keyboard behavior and basic accessibility for any interactive UI changes.
 - Update `README.md` and `CHANGELOG.md` when the change affects setup, usage, or end-user behavior.
+- If contributor workflow changed, update `CONTRIBUTING.md` too.
 
 ## Content Notes
 
