@@ -242,6 +242,9 @@ const articlePagefindAttributes = doc.data.hideFromSearch
     yml: 'YAML',
   };
   const visibleCodeLanguages = new Set(Object.keys(codeLanguageLabels).filter((language) => !['md', 'mdx', 'text'].includes(language)));
+  const copyText = async (value) => {
+    await navigator.clipboard.writeText(value);
+  };
 
   const articleCodeBlocks = document.querySelectorAll('.astro-code');
 
@@ -301,7 +304,7 @@ const articlePagefindAttributes = doc.data.hideFromSearch
 
     copyButton.addEventListener('click', async () => {
       try {
-        await navigator.clipboard.writeText(codeText);
+        await copyText(codeText);
         copyButton.innerHTML = copiedIcon;
         copyButton.setAttribute('aria-label', 'Copied');
         copyButton.setAttribute('title', 'Copied');
@@ -323,6 +326,57 @@ const articlePagefindAttributes = doc.data.hideFromSearch
     });
 
     shell.append(copyButton);
+  });
+
+  const articleHeadingLinks = document.querySelectorAll('.docs-article .prose h2[id]');
+  const headingLinkIcon = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M10 13a5 5 0 0 0 7.07 0l1.83-1.83a5 5 0 1 0-7.07-7.07L10.5 5.43"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" d="M14 11a5 5 0 0 0-7.07 0L5.1 12.83a5 5 0 0 0 7.07 7.07l1.33-1.33"></path>
+    </svg>
+  `;
+  const headingCopiedIcon = `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m5 12.75 4.25 4.25L19 7.25"></path>
+    </svg>
+  `;
+
+  articleHeadingLinks.forEach((heading) => {
+    if (!(heading instanceof HTMLElement) || heading.querySelector('.docs-heading-anchor')) return;
+
+    const headingButton = document.createElement('button');
+    headingButton.type = 'button';
+    headingButton.className = 'docs-heading-anchor';
+    headingButton.setAttribute('aria-label', `Copy link to ${heading.textContent?.trim() ?? 'section'}`);
+    headingButton.setAttribute('title', 'Copy link to section');
+    headingButton.innerHTML = headingLinkIcon;
+
+    headingButton.addEventListener('click', async () => {
+      const headingUrl = new URL(window.location.href);
+      headingUrl.hash = heading.id;
+
+      try {
+        await copyText(headingUrl.toString());
+        history.replaceState(null, '', headingUrl);
+        headingButton.innerHTML = headingCopiedIcon;
+        headingButton.setAttribute('aria-label', 'Link copied');
+        headingButton.setAttribute('title', 'Link copied');
+        window.setTimeout(() => {
+          headingButton.innerHTML = headingLinkIcon;
+          headingButton.setAttribute('aria-label', `Copy link to ${heading.textContent?.trim() ?? 'section'}`);
+          headingButton.setAttribute('title', 'Copy link to section');
+        }, 1600);
+      } catch {
+        headingButton.setAttribute('aria-label', 'Copy failed');
+        headingButton.setAttribute('title', 'Copy failed');
+        window.setTimeout(() => {
+          headingButton.setAttribute('aria-label', `Copy link to ${heading.textContent?.trim() ?? 'section'}`);
+          headingButton.setAttribute('title', 'Copy link to section');
+        }, 1600);
+      }
+    });
+
+    heading.append(headingButton);
   });
 
   if (articleRoot instanceof HTMLElement) {

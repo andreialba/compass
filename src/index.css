@@ -244,6 +244,47 @@ textarea {
   color: var(--color-text-strong);
 }
 
+.docs-article .prose h2[id] {
+  scroll-margin-top: 6rem;
+}
+
+.docs-heading-anchor {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-left: 0.45rem;
+  vertical-align: middle;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-ui-label);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-0.1rem);
+  transition: opacity 150ms ease, transform 150ms ease, color 150ms ease;
+}
+
+.docs-heading-anchor svg {
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
+.docs-article .prose h2[id]:hover .docs-heading-anchor,
+.docs-article .prose h2[id]:focus-within .docs-heading-anchor,
+.docs-heading-anchor:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.docs-heading-anchor:hover,
+.docs-heading-anchor:focus-visible {
+  color: var(--color-accent);
+}
+
 .prose a {
   color: var(--color-accent);
 }
