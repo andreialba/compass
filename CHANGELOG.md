@@ -7,6 +7,7 @@ The format is based on Keep a Changelog, and this project follows semantic versi
 ## [Unreleased]
 
 ### Changed
+- Added an optional `/rss.xml` feed for recent docs updates using article `updatedAt` metadata.
 - Removed an unused fallback favicon asset and aligned the starter docs with the actual branding files in use.
 - Simplified shared search and pagination types by dropping unreferenced fields and props.
 - Reused a shared sidebar section helper across docs routes and made the header brand label follow `site.config.mjs`.

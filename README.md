@@ -20,6 +20,7 @@ Compass is a clean Astro documentation theme for product docs, support centers, 
 - Expanded article frontmatter for tags, status, edit links, hero images, redirects, and search visibility
 - Previous and next article navigation within each docs section
 - Searchable docs landing page and sidebar search powered by Pagefind
+- Optional RSS feed for recent docs updates at `/rss.xml`
 - Reusable docs components like callouts, tabs, steps, accordions, checklists, buttons, and quotes
 - Syntax-aware code blocks with language headers for code-focused snippets
 - Light and dark mode support
@@ -31,6 +32,7 @@ Compass is a clean Astro documentation theme for product docs, support centers, 
 
 - `astro`
 - `@astrojs/mdx`
+- `@astrojs/rss`
 - `@astrojs/sitemap`
 - `tailwindcss`
 - `@tailwindcss/typography`
@@ -47,6 +49,7 @@ npm run dev
 Open `http://localhost:3000`.
 
 Search is generated during `npm run build`, so use `npm run preview` when you want to test the full search experience locally.
+Compass also generates an RSS feed for docs updates at `/rss.xml`.
 
 Useful scripts:
 
@@ -205,7 +208,7 @@ If you add your own Astro component, register it there to make it available insi
 - `site.config.mjs` still contains placeholder URLs by default.
 - `astro.config.mjs` uses the value from `site.config.mjs` for the canonical site URL.
 - `astro.config.mjs` enables responsive local images by default with Astro's image pipeline.
-- `npm run build` generates the static site, sitemap, and Pagefind search bundle.
+- `npm run build` generates the static site, RSS feed, sitemap, and Pagefind search bundle.
 - If you plan to publish this package, update the package metadata in `package.json`.
 
 ## License
