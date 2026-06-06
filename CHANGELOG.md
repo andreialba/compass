@@ -12,6 +12,7 @@ The format is based on Keep a Changelog, and this project follows semantic versi
 - Redirect alias generation for docs pages via `redirectFrom` frontmatter.
 
 ### Changed
+- Fixed the header mobile navigation toggle so the menu opens correctly on small screens and closes after selection.
 - Article pages now support optional hero images and "Edit this page" links from frontmatter.
 - Hidden docs are excluded from suggested article search prompts and the Pagefind indexed article set.
 - Moved article metadata like "Updated" and "Edit this page" below the article panel while keeping previous/next navigation inside the content card.

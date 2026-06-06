@@ -147,7 +147,19 @@ function isActiveNavItem(href: string) {
 
     mobileMenuToggle.addEventListener('click', () => {
       const isOpen = !mobileMenuPanel.classList.contains('hidden');
-      setMobileMenuOpen(isOpen);
+      setMobileMenuOpen(!isOpen);
+    });
+
+    mobileMenuPanel.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        setMobileMenuOpen(false);
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        setMobileMenuOpen(false);
+      }
     });
 
     mobileMenuPanel.addEventListener('focusout', (event) => {
