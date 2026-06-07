@@ -256,49 +256,6 @@ textarea {
   scroll-margin-top: 6rem;
 }
 
-.docs-heading-anchor {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.6rem;
-  height: 1.6rem;
-  margin-left: 0.45rem;
-  vertical-align: middle;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--color-ui-label);
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateX(-0.1rem);
-  transition: opacity 150ms ease, transform 150ms ease, color 150ms ease;
-}
-
-.docs-heading-anchor svg {
-  width: 0.95rem;
-  height: 0.95rem;
-}
-
-.docs-article .prose h2[id]:hover .docs-heading-anchor,
-.docs-article .prose h2[id]:focus-within .docs-heading-anchor,
-.docs-heading-anchor:focus-visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(0);
-}
-
-.docs-heading-anchor:hover,
-.docs-heading-anchor:focus-visible {
-  color: var(--color-accent);
-}
-
-@media (max-width: 767px) {
-  .docs-heading-anchor {
-    display: none;
-  }
-}
-
 .prose a {
   color: var(--color-accent);
 }
@@ -425,6 +382,47 @@ html.dark .astro-code[data-language='text'] span {
 .code-block-copy svg {
   height: 1rem;
   width: 1rem;
+}
+
+.code-block-copy::after {
+  content: attr(data-copy-tooltip);
+  position: absolute;
+  top: 50%;
+  right: calc(100% + 0.55rem);
+  border: 1px solid var(--color-control-border);
+  border-radius: 999px;
+  background: var(--color-control-bg);
+  color: var(--color-control-text);
+  padding: 0.28rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(0.2rem, -50%);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease,
+    color 140ms ease,
+    border-color 140ms ease,
+    background-color 140ms ease;
+}
+
+.code-block-copy[data-copy-tooltip]::after {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+.code-block-copy[data-copy-state='success']::after {
+  color: var(--color-callout-success-title);
+  border-color: color-mix(in srgb, var(--color-callout-success-icon) 28%, var(--color-control-border));
+  background: color-mix(in srgb, var(--color-callout-success-icon) 10%, var(--color-control-bg));
+}
+
+.code-block-copy[data-copy-state='error']::after {
+  color: var(--color-callout-danger-title);
+  border-color: color-mix(in srgb, var(--color-callout-danger-icon) 28%, var(--color-control-border));
 }
 
 .code-block-header {
@@ -1179,6 +1177,8 @@ html.dark .astro-code[data-language='text'] span {
   border-bottom: 2px solid transparent;
   border-radius: 0;
   background: transparent;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   padding: 0 0 0.8rem;
 }
 
@@ -1215,6 +1215,8 @@ html.dark .astro-code[data-language='text'] span {
   margin-top: -1px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+  font-size: 0.875rem;
+  line-height: 1.7142857;
   padding-top: 1rem;
 }
 
@@ -1276,6 +1278,86 @@ html.dark .astro-code[data-language='text'] span {
   font-size: 0.9rem;
   line-height: 1.35;
   word-break: break-word;
+}
+
+.docs-table-wrap {
+  border: 1px solid var(--color-code-block-border);
+  border-radius: var(--radius-ui);
+  background: var(--color-surface);
+  -webkit-overflow-scrolling: touch;
+}
+
+.docs-table {
+  min-width: 100%;
+}
+
+.docs-table-caption {
+  padding: 0.9rem 1rem 0;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  text-align: left;
+  caption-side: top;
+}
+
+.docs-table-cell {
+  border-bottom: 1px solid var(--color-border);
+  padding: 0.85rem 1rem;
+  vertical-align: top;
+}
+
+.docs-table-head {
+  color: var(--color-text-strong);
+  background: var(--color-surface-muted);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.docs-table-body-cell {
+  color: var(--color-text);
+  font-size: 0.94rem;
+  line-height: 1.55;
+}
+
+.docs-table tbody tr:last-child .docs-table-cell {
+  border-bottom: 0;
+}
+
+.docs-table .is-left {
+  text-align: left;
+}
+
+.docs-table .is-center {
+  text-align: center;
+}
+
+.docs-table .is-right {
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .docs-table {
+    min-width: 34rem;
+  }
+
+  .docs-table-caption {
+    padding: 0.75rem 0.85rem 0;
+    font-size: 0.82rem;
+  }
+
+  .docs-table-cell {
+    padding: 0.7rem 0.85rem;
+  }
+
+  .docs-table-head {
+    font-size: 0.75rem;
+  }
+
+  .docs-table-body-cell {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
 }
 
 ::selection {

@@ -9,6 +9,7 @@ import FileTree from './FileTree.astro';
 import QuoteBlock from './QuoteBlock.astro';
 import Step from './Step.astro';
 import Steps from './Steps.astro';
+import Table from './Table.astro';
 import Tabs from './Tabs.astro';
 
 export const mdxComponents = {
@@ -23,5 +24,6 @@ export const mdxComponents = {
   QuoteBlock,
   Step,
   Steps,
+  Table,
   Tabs,
 };

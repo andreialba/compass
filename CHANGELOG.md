@@ -6,10 +6,13 @@ The format is based on Keep a Changelog, and this project follows semantic versi
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-06-07
+
 ### Added
 - Added a reusable `CodeTabs` MDX component for package manager, framework, and command-variant code examples.
 - Added a reusable `FileTree` MDX component for showing repo structure and article-owned file paths.
 - Added a reusable `Badge` MDX component for inline status labels like new, beta, required, and deprecated.
+- Added a reusable `Table` MDX component for comparisons, reference grids, and compact docs data.
 
 ### Changed
 - Added an optional `/rss.xml` feed for recent docs updates using article `updatedAt` metadata.
@@ -17,8 +20,9 @@ The format is based on Keep a Changelog, and this project follows semantic versi
 - Simplified shared search and pagination types by dropping unreferenced fields and props.
 - Reused a shared sidebar section helper across docs routes and made the header brand label follow `site.config.mjs`.
 - Unified small UI labels like category headings, sidebar labels, article meta, and the 404 marker under the same mono sentence-case treatment.
-- Hid article heading link icons on mobile so wrapped H2 headings keep cleaner spacing.
 - Matched the standard `Tabs` active state underline to the existing `CodeTabs` treatment.
+- Removed article H2 link-copy controls and their related styling.
+- Replaced the code copy success checkmark with a tooltip-style copied state.
 
 ## [0.1.3] - 2026-06-05
 
@@ -35,7 +39,6 @@ The format is based on Keep a Changelog, and this project follows semantic versi
 - Search results now highlight matched terms in titles and excerpts, using Pagefind hit excerpts when available.
 - Refined the article table of contents with a flush tinted background panel that extends to the card edges.
 - Shifted sidebar and article meta labels to a lighter mono sentence-case styling with stronger light-mode contrast.
-- Added hover-only H2 section link buttons in articles for quick deep-link copying.
 - Updated starter docs, README, and contributing guidance to document the new frontmatter workflow.
 
 ## [0.1.2] - 2026-06-05
