@@ -73,8 +73,12 @@ const searchPreviews = getSearchPreviewLookup(allDocs);
       <div class="min-w-0 flex-1">
         {isParentView && parentData ? (
           <section class="site-panel rounded-[15px] border border-[var(--color-border)] bg-[var(--color-surface)] p-6 sm:p-8 lg:p-10">
-            <p class="docs-ui-label">Category</p>
-            <h1 class="mt-4 text-4xl font-semibold tracking-tight text-[var(--color-text-strong)]">{parentData.name}</h1>
+            <nav class="docs-breadcrumbs mb-6 flex flex-wrap items-center gap-2 text-sm text-[var(--color-text-muted)]">
+              <a href="/" class="breadcrumb-link transition hover:text-[var(--color-accent)]">Home</a>
+              <span>/</span>
+              <span class="breadcrumb-current text-[var(--color-text-strong)]">{parentData.name}</span>
+            </nav>
+            <h1 class="text-4xl font-semibold tracking-tight text-[var(--color-text-strong)]">{parentData.name}</h1>
             <p class="mt-3 max-w-2xl text-base leading-7 text-[var(--color-text)]">{parentData.description}</p>
 
             <div class="mt-10 space-y-10">
@@ -87,16 +91,21 @@ const searchPreviews = getSearchPreviewLookup(allDocs);
                     {section.name}
                   </a>
                   <div class="mt-4">
-                    <div class="space-y-0">
-                      {getOrderedDocsForCategory(allDocs, section.slug).map((article) => (
+                    <ol class="space-y-1">
+                      {getOrderedDocsForCategory(allDocs, section.slug).map((article, index) => (
+                        <li>
                           <a
                             href={getArticleHref(section.slug, getCleanDocSlug(article.id))}
-                            class="docs-article-list-link block px-4 py-3 text-sm text-[var(--color-link-subtle)] transition hover:text-[var(--color-accent)]"
+                            class="docs-article-list-link grid grid-cols-[2rem_minmax(0,1fr)] items-center gap-x-3 py-2 text-sm text-[var(--color-link-subtle)] transition hover:text-[var(--color-accent)]"
                           >
-                            {article.data.title}
+                            <span class="self-center text-right text-xs font-semibold leading-none text-[var(--color-text-muted)]">
+                              {String(index + 1).padStart(2, '0')}
+                            </span>
+                            <span class="leading-6">{article.data.title}</span>
                           </a>
-                        ))}
-                    </div>
+                        </li>
+                      ))}
+                    </ol>
                   </div>
                 </section>
               ))}

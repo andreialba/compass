@@ -542,6 +542,8 @@ html.dark .astro-code[data-language='text'] span {
 }
 
 .docs-breadcrumbs {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
   color: var(--color-text-muted);
 }
 
