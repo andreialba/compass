@@ -6,6 +6,10 @@ The format is based on Keep a Changelog, and this project follows semantic versi
 
 ## [Unreleased]
 
+### Changed
+- Moved article table of contents links into the left docs sidebar under the category list and removed the previous in-article tinted panel treatment.
+- Added a sticky inline mobile "On this page" dropdown under the main header with a live current-section label, and increased spacing between table of contents items.
+
 ## [0.1.4] - 2026-06-07
 
 ### Added

@@ -20,6 +20,7 @@
 :root {
   --font-sans: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, "SFMono-Regular", "Roboto Mono", Menlo, Monaco, "Liberation Mono", "Courier New", monospace;
+  --docs-header-height: 4rem;
 
   /* Shared component radius for cards, panels, controls, and docs UI. */
   --radius-ui: 15px;
@@ -522,8 +523,8 @@ html.dark .astro-code[data-language='text'] span {
 }
 
 .docs-sidebar .sidebar-link:hover {
-  background: var(--color-hover-surface);
-  color: var(--color-link-subtle-hover);
+  background: transparent;
+  color: var(--color-accent);
 }
 
 .docs-sidebar .sidebar-link.is-active {
@@ -565,51 +566,118 @@ html.dark .astro-code[data-language='text'] span {
   color: var(--color-link-subtle);
 }
 
-.docs-toc {
-  position: relative;
-  max-width: none;
-  margin-inline: -1.5rem;
-  padding: 1rem 2.6rem 1rem 2.75rem;
-  background:
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--color-accent) 6%, var(--color-surface)) 0%,
-      color-mix(in srgb, var(--color-accent) 3.5%, var(--color-surface)) 30%,
-      var(--color-surface) 100%
-    );
-}
-
 .docs-toc-title {
   margin: 0;
 }
 
+.docs-sidebar-toc {
+  padding-top: 0.1rem;
+}
+
+.docs-sidebar-toc .docs-toc-title {
+  display: block;
+  margin-bottom: 1.25rem;
+}
+
+.docs-sidebar-section-list {
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.docs-sidebar-section-list li + li {
+  margin-top: 0.75rem;
+}
+
+.docs-sidebar-section-link {
+  padding-top: 0.16rem;
+  padding-bottom: 0.16rem;
+  line-height: 1.4;
+}
+
+.docs-sidebar-toc-list {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.docs-sidebar-toc-list::before {
+  top: 0.35rem;
+}
+
+.docs-mobile-toc summary::-webkit-details-marker {
+  display: none;
+}
+
+.docs-mobile-toc-panel {
+  display: none;
+}
+
+.docs-mobile-toc[open] .docs-mobile-toc-panel {
+  display: block;
+}
+
+.docs-mobile-toc[open] .docs-mobile-toc-summary {
+  border-bottom-color: transparent;
+}
+
+.docs-mobile-toc[open] .docs-mobile-toc-icon {
+  transform: rotate(180deg);
+}
+
+.docs-mobile-toc-icon {
+  transition: transform 150ms ease;
+}
+
+.docs-mobile-toc-current {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.docs-mobile-toc-shell {
+  pointer-events: none;
+}
+
+.docs-mobile-toc-row {
+  pointer-events: auto;
+  max-width: 100%;
+}
+
+.docs-mobile-toc {
+  width: 100%;
+}
+
+.docs-mobile-toc-summary {
+  border-bottom: 1px solid transparent;
+}
+
 .docs-toc-list {
   position: relative;
-  margin: 0;
-  padding: 0.75rem 0 0 0.9rem;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0 0 0 0.9rem;
   list-style: none;
 }
 
 .docs-toc-list::before {
   content: '';
   position: absolute;
-  top: 0.2rem;
+  top: 0.35rem;
   bottom: 0;
   left: 0;
   width: 1px;
   background: color-mix(in srgb, var(--color-border) 80%, transparent);
 }
 
-.docs-toc-list li + li {
-  margin-top: 0.22rem;
-}
-
 .docs-toc-link {
   position: relative;
   display: block;
-  padding: 0.08rem 0 0.08rem 0.55rem;
+  padding: 0.16rem 0 0.58rem 0.55rem;
   color: var(--color-text);
-  font-size: 0.98rem;
+  font-size: 0.92rem;
   font-weight: 400;
   line-height: 1.4;
   text-decoration: none;
@@ -619,8 +687,8 @@ html.dark .astro-code[data-language='text'] span {
 .docs-toc-link::before {
   content: '';
   position: absolute;
-  top: 0.2rem;
-  bottom: 0.2rem;
+  top: 0;
+  bottom: 0;
   left: -0.9rem;
   width: 2px;
   background: transparent;
@@ -630,35 +698,31 @@ html.dark .astro-code[data-language='text'] span {
   color: var(--color-accent);
 }
 
+.docs-toc-link.is-current {
+  color: var(--color-accent);
+}
+
 .docs-toc-link:hover::before {
   background: color-mix(in srgb, var(--color-accent) 55%, transparent);
+}
+
+.docs-toc-link.is-current::before {
+  background: color-mix(in srgb, var(--color-accent) 70%, transparent);
 }
 
 .docs-toc-link-subheading {
   padding-left: 1.15rem;
   color: var(--color-text-muted);
-  font-size: 0.92rem;
+  font-size: 0.86rem;
+}
+
+.docs-toc-list li:last-child .docs-toc-link {
+  padding-bottom: 0.16rem;
 }
 
 .docs-toc-link-subheading::before {
   left: -0.9rem;
   width: 1px;
-}
-
-@media (min-width: 640px) {
-  .docs-toc {
-    margin-inline: -2rem;
-    padding-right: 3.1rem;
-    padding-left: 3.25rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .docs-toc {
-    margin-inline: -2.5rem;
-    padding-right: 3.6rem;
-    padding-left: 3.75rem;
-  }
 }
 
 .docs-article-link:hover,

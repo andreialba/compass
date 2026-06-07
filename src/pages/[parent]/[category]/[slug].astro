@@ -59,10 +59,49 @@ const articlePagefindAttributes = doc.data.hideFromSearch
 ---
 
 <Layout title={`${doc.data.title} | ${categoryData?.name ?? doc.data.category}`} description={doc.data.description}>
+  {tocHeadings.length > 0 && (
+    <div class="docs-mobile-toc-shell sticky top-[var(--docs-header-height)] z-30 border-b border-[var(--color-border)] bg-[color:color-mix(in_srgb,var(--color-surface)_94%,transparent)] backdrop-blur lg:hidden" data-mobile-toc>
+      <div class="mx-auto max-w-[1280px] px-4 md:px-8">
+        <div class="docs-mobile-toc-row py-2">
+          <details class="docs-mobile-toc relative block w-full">
+            <summary class="docs-mobile-toc-summary flex w-full cursor-pointer list-none items-center gap-3 px-0 py-2.5 text-sm font-medium text-[var(--color-text-strong)]">
+              <span class="shrink-0">On this page</span>
+              <svg class="docs-mobile-toc-icon h-4 w-4 shrink-0 text-[var(--color-ui-label)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
+              </svg>
+              <span class="docs-mobile-toc-current min-w-0 text-sm text-[var(--color-text-strong)]" data-mobile-toc-current>
+                {tocHeadings[0].text}
+              </span>
+            </summary>
+            <div class="docs-mobile-toc-panel pt-2 pb-3">
+              <ol class="docs-toc-list mt-0">
+                {tocHeadings.map((heading) => (
+                  <li>
+                    <a
+                      href={`#${heading.slug}`}
+                      data-toc-link={heading.slug}
+                      class:list={[
+                        'docs-toc-link',
+                        heading.depth === 3 && 'docs-toc-link-subheading',
+                      ]}
+                    >
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </details>
+        </div>
+      </div>
+    </div>
+  )}
+
   <div class="mx-auto flex max-w-[1280px] flex-col gap-10 px-4 py-10 lg:flex-row lg:px-8">
     <Sidebar
       sections={sidebarSections}
       activeCategory={doc.data.category}
+      tocHeadings={tocHeadings}
       suggestions={suggestedArticles}
       searchPreviews={searchPreviews}
     />
@@ -117,31 +156,9 @@ const articlePagefindAttributes = doc.data.hideFromSearch
           </div>
         )}
 
-        {tocHeadings.length > 0 && (
-          <nav
-            class="docs-toc mt-8"
-            aria-label="Table of contents"
-          >
-            <p class="docs-toc-title">On this page</p>
-            <ol class="docs-toc-list mt-4">
-              {tocHeadings.map((heading) => (
-                <li>
-                  <a
-                    href={`#${heading.slug}`}
-                    class:list={[
-                      'docs-toc-link',
-                      heading.depth === 3 && 'docs-toc-link-subheading',
-                    ]}
-                  >
-                    {heading.text}
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </nav>
-        )}
+        <div class="docs-divider mt-8 border-t"></div>
 
-        <div class="prose mt-10 max-w-none prose-headings:font-semibold prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:text-[var(--color-accent-hover)] prose-code:rounded prose-code:bg-[var(--color-inline-code-bg)] prose-code:px-1 prose-code:py-0.5 prose-code:text-[var(--color-inline-code-fg)] prose-pre:bg-transparent prose-pre:p-0">
+        <div class="prose mt-8 max-w-none prose-headings:font-semibold prose-a:text-[var(--color-accent)] prose-a:no-underline hover:prose-a:text-[var(--color-accent-hover)] prose-code:rounded prose-code:bg-[var(--color-inline-code-bg)] prose-code:px-1 prose-code:py-0.5 prose-code:text-[var(--color-inline-code-fg)] prose-pre:bg-transparent prose-pre:p-0">
           <Content components={mdxComponents} />
         </div>
 
@@ -236,6 +253,8 @@ const articlePagefindAttributes = doc.data.hideFromSearch
 
 <script is:inline>
   const articleRoot = document.querySelector('.docs-article');
+  const mobileTocCurrent = document.querySelector('[data-mobile-toc-current]');
+  const mobileTocDetails = document.querySelector('.docs-mobile-toc');
   const codeLanguageLabels = {
     astro: 'Astro',
     bash: 'Bash',
@@ -260,6 +279,67 @@ const articlePagefindAttributes = doc.data.hideFromSearch
   };
 
   const articleCodeBlocks = document.querySelectorAll('.astro-code');
+  const tocLinks = Array.from(document.querySelectorAll('[data-toc-link]')).filter(
+    (link) => link instanceof HTMLAnchorElement,
+  );
+  const tocHeadingTargets = Array.from(
+    new Map(
+      tocLinks.map((link) => {
+        const slug = link.getAttribute('data-toc-link') ?? '';
+        const target = slug ? document.getElementById(slug) : null;
+        return [slug, target];
+      }),
+    ).entries(),
+  )
+    .map(([slug, element]) => ({ slug, element }))
+    .filter(
+      (entry) => entry.slug && entry.element instanceof HTMLElement,
+    );
+
+  const setCurrentTocHeading = (slug) => {
+    tocLinks.forEach((link) => {
+      const isCurrent = link.getAttribute('data-toc-link') === slug;
+      link.classList.toggle('is-current', isCurrent);
+      if (isCurrent) {
+        link.setAttribute('aria-current', 'true');
+      } else {
+        link.removeAttribute('aria-current');
+      }
+    });
+
+    if (mobileTocCurrent instanceof HTMLElement) {
+      const activeLink = tocLinks.find((link) => link.getAttribute('data-toc-link') === slug);
+      mobileTocCurrent.textContent = activeLink?.textContent?.trim() ?? '';
+    }
+  };
+
+  if (tocHeadingTargets.length > 0) {
+    const updateCurrentHeading = () => {
+      const scrollOffset = 140;
+      let activeHeading = tocHeadingTargets[0];
+
+      tocHeadingTargets.forEach((entry) => {
+        if (!(entry.element instanceof HTMLElement)) return;
+        if (entry.element.getBoundingClientRect().top - scrollOffset <= 0) {
+          activeHeading = entry;
+        }
+      });
+
+      setCurrentTocHeading(activeHeading.slug);
+    };
+
+    updateCurrentHeading();
+    document.addEventListener('scroll', updateCurrentHeading, { passive: true });
+    window.addEventListener('resize', updateCurrentHeading);
+  }
+
+  if (mobileTocDetails instanceof HTMLDetailsElement) {
+    mobileTocDetails.querySelectorAll('[data-toc-link]').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileTocDetails.open = false;
+      });
+    });
+  }
 
   articleCodeBlocks.forEach((block) => {
     if (!(block instanceof HTMLElement) || block.parentElement?.classList.contains('code-block-shell')) return;
